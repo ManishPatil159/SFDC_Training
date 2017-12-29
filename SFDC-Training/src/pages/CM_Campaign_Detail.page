@@ -1,0 +1,41 @@
+<apex:page standardController="Campaign" extensions="CampaignEditController" >
+<script type="text/javascript">
+	function confirmDelete(){
+		if (confirm('Are you sure you want to delete this campaign?')) {
+    		// deleteFunc();
+    		return true;
+		} else {
+    		// Do nothing!
+    		return false;
+		}
+	}
+</script>
+<apex:form >
+	<apex:actionFunction name="deleteFunc"  action="{! deleteCampaign}"/>
+    <apex:pageBlock title="Campaign Detail">
+        <!-- <apex:detail /> -->
+        <apex:outputPanel style="float:right">
+           	<apex:pageBlockSection columns="3">
+           		<apex:outputLink value="CM_Campaign_Edit?id={! Campaign.Id}">Edit</apex:outputLink>
+               	<!--  <apex:outputLink onClick="confirmDelete()"  >Delete</apex:outputLink>  -->
+               	<apex:commandLink action="{! deleteCampaign }" onclick="return confirmDelete()" value="Delete" id="theCommandLink"/>
+               	<apex:outputLink >Copy</apex:outputLink>
+        	</apex:pageBlockSection>            
+        </apex:outputPanel>
+                      
+        <apex:pageBlockSection >
+                <apex:outputField label="Campaign Owner" value="{! Campaign.Owner.Name }" />
+                <apex:outputField value="{! Campaign.Name }" />
+                <apex:outputField value="{! Campaign.StartDate }" />
+                <apex:outputField value="{! Campaign.EndDate }" />
+                <apex:outputField value="{! Campaign.Type }" />
+                <apex:outputField value="{! Campaign.NumberSent }" />
+                <apex:outputField value="{! Campaign.Parent.Name }" />
+                <apex:outputField value="{! Campaign.Status }" />
+                <apex:outputField label="Created By" value="{! Campaign.CreatedBy.Name }" />
+                <apex:outputField label="Modified By" value="{! Campaign.LastModifiedBy.Name }" />
+                <apex:outputField value="{! Campaign.Description }" />
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

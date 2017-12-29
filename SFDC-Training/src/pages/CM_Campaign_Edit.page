@@ -1,0 +1,23 @@
+<apex:page standardController="Campaign" extensions="CampaignEditController">
+    <apex:form >
+    	<apex:pageBlock title="Campaign Detail" mode="Edit">
+            <apex:pageBlockSection >
+                    <apex:inputField label="Campaign Owner" value="{! Campaign.Owner.Name }" />
+                    <apex:inputField value="{! Campaign.Name }" />
+                    <apex:inputField value="{! Campaign.StartDate }" />
+                    <apex:inputField value="{! Campaign.EndDate }" />
+                    <apex:inputField value="{! Campaign.Type }" />
+                    <apex:inputField value="{! Campaign.NumberSent }" />
+                    <apex:inputField label="Parent" value="{! Campaign.ParentId }" />
+                    <apex:inputField value="{! Campaign.Status }" />
+                    <apex:inputField value="{! Campaign.Description }" />
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                
+            	<!--  <apex:commandButton onclick="saveAndRedirectFunc()" reRender="testmp"  value="Save"/>  -->
+            	<apex:commandButton action="{! saveAndRedirect }"  value="Save"/>
+            </apex:pageBlockButtons>
+    	</apex:pageBlock>
+            
+   </apex:form>
+</apex:page>
