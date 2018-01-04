@@ -1,6 +1,49 @@
-<apex:page >
-<!-- Begin Default Content REMOVE THIS -->
-<h1>Congratulations</h1>
-This is your new Page
-<!-- End Default Content REMOVE THIS -->
+<apex:page controller="Pm2Controller" >
+<apex:pageMessages></apex:pageMessages>
+	<apex:form>
+		<apex:pageBlock title="Check Prime Number" id="primePageBlock">
+			<apex:pageBlockSection>
+				<apex:inputText  value='{! value }' id='txtPrineNo' label='Enter Number'>
+				</apex:inputText >
+			</apex:pageBlockSection>
+			<apex:pageBlockButtons >
+            	<apex:commandButton action="{! isPrime }"  value="Check"/>
+            </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<apex:pageBlock title="Check Palindrome" id="palindromePageBlock">
+			<apex:pageBlockSection>
+				<apex:inputText  value='{! strPalindrome }' id='txtPalindrome' label='Enter String'>
+				</apex:inputText >
+			</apex:pageBlockSection>
+			<apex:pageBlockButtons >
+            	<apex:commandButton action="{! isPalindrome }"  value="Check"/>
+            </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<apex:pageBlock title="Replace occurrences" id="replaceOccurrencesPageBlock">
+			<apex:pageBlockSection id="replaceOccurrencesPageSection">
+				<apex:inputText value='{! strRemoveOccurrence }'
+					onkeypress="handleKeyPress(event);" 
+					id='txtRemoveOccurrenceString' 
+					label='Enter Strings'>
+				</apex:inputText>
+				<apex:commandButton action="{! addInRemoveOccurrenceString }" value="Add" id="searchBtn" 
+					styleClass="hiddenButton"  >
+				</apex:commandButton>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection>
+				<apex:inputText value='{! strReplacement }' id='txtReplacement' label='Replacement'>
+				</apex:inputText >
+			</apex:pageBlockSection>
+			<apex:repeat value="{! arrRemoveOccurrenceString }" var="valRemoveOccurrenceString">
+        		<apex:outputText value="{!valRemoveOccurrenceString}" />
+			</apex:repeat>
+			
+			
+			<apex:pageBlockButtons >
+            	<apex:commandButton action="{! replaceOccurrences }"  value="Check"/>
+            </apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>	
 </apex:page>
