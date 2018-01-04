@@ -1,49 +1,120 @@
-<apex:page controller="Pm2Controller" >
-<apex:pageMessages></apex:pageMessages>
-	<apex:form>
-		<apex:pageBlock title="Check Prime Number" id="primePageBlock">
-			<apex:pageBlockSection>
-				<apex:inputText  value='{! value }' id='txtPrineNo' label='Enter Number'>
-				</apex:inputText >
-			</apex:pageBlockSection>
-			<apex:pageBlockButtons >
-            	<apex:commandButton action="{! isPrime }"  value="Check"/>
-            </apex:pageBlockButtons>
-		</apex:pageBlock>
+<apex:page controller="Pm1Controller" >
+<style>
+	.col-half {
+		width:49%;
+		display:inline-block;
+	}
+	.pbButton {
+    	display: none;
+	}
+</style>
+<apex:pageMessages ></apex:pageMessages>
+	<apex:form >
+	<!-- Check if number is prime -->
+		<div class="col-half">
+			<apex:pageBlock title="Check Prime Number" id="primePageBlock">
+				<apex:pageBlockSection >
+					<apex:inputText value="{! value }" id="txtPrineNo" label="Enter Number">
+					</apex:inputText>
+				</apex:pageBlockSection>
+				<apex:pageBlockButtons >
+	            	<apex:commandButton action="{! isPrime }"  value="Check"/>
+	            </apex:pageBlockButtons>
+			</apex:pageBlock>
+		</div>
 		
-		<apex:pageBlock title="Check Palindrome" id="palindromePageBlock">
-			<apex:pageBlockSection>
-				<apex:inputText  value='{! strPalindrome }' id='txtPalindrome' label='Enter String'>
-				</apex:inputText >
-			</apex:pageBlockSection>
-			<apex:pageBlockButtons >
-            	<apex:commandButton action="{! isPalindrome }"  value="Check"/>
-            </apex:pageBlockButtons>
-		</apex:pageBlock>
+		<!-- Check if number is palindrome -->
+		<div class="col-half">
+			<apex:pageBlock title="Check Palindrome String" id="palindromePageBlock">
+				<apex:pageBlockSection >
+					<apex:inputText value="{! strPalindrome }" id="txtPalindrome" label="Enter String">
+					</apex:inputText>
+				</apex:pageBlockSection>
+				<apex:pageBlockButtons >
+	            	<apex:commandButton action="{! isPalindrome }"  value="Check"/>
+	            </apex:pageBlockButtons>
+			</apex:pageBlock>
+		</div>
 		
-		<apex:pageBlock title="Replace occurrences" id="replaceOccurrencesPageBlock">
-			<apex:pageBlockSection id="replaceOccurrencesPageSection">
-				<apex:inputText value='{! strRemoveOccurrence }'
-					onkeypress="handleKeyPress(event);" 
-					id='txtRemoveOccurrenceString' 
-					label='Enter Strings'>
-				</apex:inputText>
-				<apex:commandButton action="{! addInRemoveOccurrenceString }" value="Add" id="searchBtn" 
-					styleClass="hiddenButton"  >
-				</apex:commandButton>
-			</apex:pageBlockSection>
-			<apex:pageBlockSection>
-				<apex:inputText value='{! strReplacement }' id='txtReplacement' label='Replacement'>
-				</apex:inputText >
-			</apex:pageBlockSection>
-			<apex:repeat value="{! arrRemoveOccurrenceString }" var="valRemoveOccurrenceString">
-        		<apex:outputText value="{!valRemoveOccurrenceString}" />
-			</apex:repeat>
-			
-			
-			<apex:pageBlockButtons >
-            	<apex:commandButton action="{! replaceOccurrences }"  value="Check"/>
-            </apex:pageBlockButtons>
-		</apex:pageBlock>
+		<!-- Replace occurrences of 'a' -->
+		<div class="col-half">
+			<apex:pageBlock title="Replace occurrences" id="replaceOccurrencesPageBlock">
+				<apex:pageBlockSection id="replaceOccurrencesPageSection">
+					<apex:inputText value="{! strRemoveOccurrence }"
+						onkeypress="handleKeyPress(event);" 
+						id="txtRemoveOccurrenceString" 
+						label="Enter Strings">
+					</apex:inputText>
+					<apex:commandButton action="{! addInRemoveOccurrenceString }" value="Add"
+						id="searchBtn" 
+						styleClass="hiddenButton">
+					</apex:commandButton>
+				</apex:pageBlockSection>
+				<apex:pageBlockSection >
+					<apex:inputText value="{! strReplacement }" id="txtReplacement" label="Replacement">
+					</apex:inputText>
+				</apex:pageBlockSection>
+				<apex:repeat value="{! arrRemoveOccurrenceString }" var="valRemoveOccurrenceString">
+	        		<apex:outputText value="{!valRemoveOccurrenceString}" /><br/>
+				</apex:repeat>
+				<apex:pageBlockButtons >
+	            	<apex:commandButton action="{! replaceOccurrences }"  value="Replace"/>
+	            </apex:pageBlockButtons>
+			</apex:pageBlock>
+		</div>
+		
+		<!-- Get String Length -->
+		<div class="col-half">
+			<apex:pageblock title="Get Length Of String">
+				<apex:pageBlockSection >
+					<apex:inputText value="{! strFindLength }" id="txtFindLength" label="Enter String">
+					</apex:inputText>
+					<apex:commandButton action="{! addInRemoveOccurrenceString }" value="Add"
+						id="searchBtn" 
+						styleClass="hiddenButton" />
+					<apex:outputText value="{! lengthOfString }" />
+				</apex:pageBlockSection>
+				<apex:pageBlockButtons >
+	            	<apex:commandButton action="{! getStringLength }"  value="Get Length"/>
+	            </apex:pageBlockButtons>
+			</apex:pageblock>
+		</div>
+		
+		<!-- Get unique numbers -->
+		<div class="col-half">
+			<apex:pageblock title="Get unique numbers">
+				<apex:pageBlockSection >
+					<apex:inputText value="{! numberInputForArray }" id="txtFindUnique" label="Enter Number">
+					</apex:inputText>
+					<apex:commandButton action="{! addInArrOfNumbersInput }" value="Add"
+						id="addNumberBtn" />
+				</apex:pageBlockSection>
+				
+				<apex:pageBlockSection >
+					<apex:repeat value="{! setOfUniqueNumbers }" var="valSetOfUniqueNumbers">
+		        		<apex:outputText value="{! valSetOfUniqueNumbers }" /><br/>
+					</apex:repeat>
+				</apex:pageBlockSection>
+				
+				<apex:pageBlockButtons >
+	            	<apex:commandButton action="{! getUniqueNumbers }"  value="Get Unique Numbers"/>
+	            </apex:pageBlockButtons>
+			</apex:pageblock>
+		</div>
+		
+		<!-- derived class -->
+		<div class="col-half">
+			<apex:pageblock title="Get Derived class number">
+				<apex:pageBlockSection>
+				<apex:inputText value="{! numberForClasses  }" id="txtNumberForClasses" label="Enter Number" >
+					</apex:inputText>
+				</apex:pageBlockSection>
+
+				<apex:pageBlockButtons >
+	            	<apex:commandButton action="{! initializeDerived }"  value="Call Derived class"/>
+	            </apex:pageBlockButtons>
+			</apex:pageblock>
+		</div>
+		
 	</apex:form>	
 </apex:page>

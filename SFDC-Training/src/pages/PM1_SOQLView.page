@@ -1,0 +1,28 @@
+<apex:page controller="PM1_SOQLController">
+	<apex:form>
+		
+		<!-- Query Opportunities -->
+		<apex:pageBlock>
+		<!-- <apex:repeat value="{!opportunityMapKeyNames }" var="key">
+				<apex:outputText value="{!key} * " />
+				<apex:outputText value="{! opportunityMap[key] }"/>
+				<br/>
+			</apex:repeat> --> 
+				<apex:pageBlockTable value="{! opportunityMap }" var="item" >
+						<apex:repeat value="{!opportunityMapKeyNames }" var="key">
+							<apex:column headerValue="{!key}"/>
+							<apex:column value="{!  opportunityMap[key] }"/>
+						</apex:repeat> 
+				</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! queryOpportunities }"  value="Get Opportunities"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Query Account -->
+		<apex:pageBlock title="Update Accounts" >
+			<apex:outputText value="{! accountCount }" />
+			<apex:commandButton action="{! queryAccounts }"  value="Update Accounts"/>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
