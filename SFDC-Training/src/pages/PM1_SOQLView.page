@@ -24,5 +24,124 @@
 			<apex:outputText value="{! accountCount }" />
 			<apex:commandButton action="{! queryAccounts }"  value="Update Accounts"/>
 		</apex:pageBlock>
+		
+		<!-- Account + Opportunity -->
+		<apex:pageBlock>
+			<apex:commandButton action="{! queryAccountOpportunity }"  
+				value="Get Accouts + Opportunities"/>
+				
+			<apex:pageBlockTable value="{! mapAccountOpportunities }" var="item" >
+				 <apex:column >
+	                <apex:facet name="header">Account</apex:facet>
+	                        {! item }
+	            </apex:column>
+	            
+	            <apex:column >
+	                <apex:facet name="header">Opportunities</apex:facet>
+	                        {! mapAccountOpportunities[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+				
+			<!-- <apex:pageBlockTable value="{! mapAccountOpportunities }" var="item" >
+				<apex:repeat value="{! lstAccountOpportunities }" var="key">
+					<apex:column headerValue="{!key}"/>
+					<apex:column value="{!  mapAccountOpportunities[key] }"/>
+				</apex:repeat> 
+			</apex:pageBlockTable> -->
+		</apex:pageBlock>
+		
+		<!-- Sorting -->
+		<apex:pageBlock title="Sorting">
+			<apex:pageBlockSection>
+				<apex:selectRadio value="{! radioSortingSelection }">
+		            <apex:selectOptions value="{! sortingOptions }"/>
+        	    </apex:selectRadio>
+        	    <apex:commandButton action="{! query10Campaigns }" value="Get Campaigns"/>
+        	    
+        	    <apex:pageBlockTable value="{! lstOpportunity }" var="item" >
+				 <apex:column >
+	                <apex:facet name="header">Id</apex:facet>
+	                        {! item.Id }
+	            </apex:column>
+	            <apex:column >
+	                <apex:facet name="header">Name</apex:facet>
+	                        {! item.Name }
+	            </apex:column>
+			</apex:pageBlockTable>
+        	    
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		
+		<!-- modified contacts -->
+		<apex:pageBlock title="Contacts modified today">
+			<apex:pageBlockSection>
+				<apex:commandButton action="{! queryContactsModifiedToday }" value="Get Contacts"/>
+        	    
+        	    <apex:pageBlockTable value="{! lstConatctUpdatedToday }" var="item" >
+				 <apex:column >
+	                <apex:facet name="header">Id</apex:facet>
+	                        {! item.Id }
+	            </apex:column>
+	            <apex:column >
+	                <apex:facet name="header">Name</apex:facet>
+	                        {! item.Name }
+	            </apex:column>
+			</apex:pageBlockTable>
+        	    
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		
+		<!-- SOSL Queries -->
+		<apex:pageBlock title="SOSL queries">
+			<apex:pageBlockSection>
+				<apex:inputText value = "{! searchStringSoql }" label = "Enter search string" />
+				<apex:commandButton action="{! querySOSL }" value="Search"/>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="Accounts">
+				<apex:pageBlockTable value="{! lstAccountSosl }" var="item" >
+					 <apex:column >
+		                <apex:facet name="header">Id</apex:facet>
+		                        {! item.Id }
+		            </apex:column>
+		            <apex:column >
+		                <apex:facet name="header">Name</apex:facet>
+		                        {! item.Name }
+		            </apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="Contacts">
+				<apex:pageBlockTable value="{! lstContactSosl }" var="item" >
+					 <apex:column >
+		                <apex:facet name="header">Id</apex:facet>
+		                        {! item.Id }
+		            </apex:column>
+		            <apex:column >
+		                <apex:facet name="header">First Name</apex:facet>
+		                        {! item.FirstName }
+		            </apex:column>
+		            <apex:column >
+		                <apex:facet name="header">Last Name</apex:facet>
+		                        {! item.LastName }
+		            </apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection title="Leads">
+				<apex:pageBlockTable value="{! lstLeadSosl }" var="item" >
+					 <apex:column >
+		                <apex:facet name="header">Id</apex:facet>
+		                        {! item.Id }
+		            </apex:column>
+		            <apex:column >
+		                <apex:facet name="header">First Name</apex:facet>
+		                        {! item.FirstName }
+		            </apex:column>
+		            <apex:column >
+		                <apex:facet name="header">Last Name</apex:facet>
+		                        {! item.LastName }
+		            </apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		
 	</apex:form>
 </apex:page>

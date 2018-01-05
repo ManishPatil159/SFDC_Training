@@ -40,8 +40,6 @@ public with sharing class Pm1Controller {
     **/
     public PageReference isPrime() {
     	pagereference pageReferenceObj = apexpages.Currentpage();
-        //apexpages.Message msg = new Apexpages.Message(ApexPages.Severity.Info,'Total Number of reloads: ' + (myInt++));
-        //apexpages.addmessage(msg);
         Boolean isPrime = true;
     	for(Integer i = 2; i < value; i++) {
     		if(math.mod(value,i) == 0) {
@@ -49,10 +47,14 @@ public with sharing class Pm1Controller {
     		}
     	}
     	if(isPrime) {
-    		ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.CONFIRM,'Number is a prime number'));
+    		ApexPages.AddMessage(
+    			new Apexpages.Message(ApexPages.Severity.CONFIRM,'Number is a prime number')
+    		);
     	}
     	else {
-    		ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.FATAL,'Number is not a prime number'));
+    		ApexPages.AddMessage(
+    			new Apexpages.Message(ApexPages.Severity.FATAL,'Number is not a prime number')
+    		);
     	}
     	return null;
     }
@@ -63,10 +65,14 @@ public with sharing class Pm1Controller {
     public PageReference isPalindrome(){
     	pagereference pageReferenceObj = apexpages.Currentpage();
     	if(strPalindrome.equalsIgnoreCase(strPalindrome.reverse())){
-    		ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.CONFIRM,'String is palindrome.'));
+    		ApexPages.AddMessage(
+    			new Apexpages.Message(ApexPages.Severity.CONFIRM,'String is palindrome.')
+    		);
     	}
     	else {
-    		ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.FATAL,'String is not palindrome.'));
+    		ApexPages.AddMessage(
+    			new Apexpages.Message(ApexPages.Severity.FATAL,'String is not palindrome.')
+    		);
     	}
     	return null;
     } 
@@ -76,8 +82,8 @@ public with sharing class Pm1Controller {
     **/
     public PageReference replaceOccurrences(){
     	pagereference pageReferenceObj = apexpages.Currentpage();
-    	for(Integer index=0; index < arrRemoveOccurrenceString.size(); index++) {
-    		arrRemoveOccurrenceString[index] = arrRemoveOccurrenceString[index].replace('a', strReplacement);
+    	for(Integer i = 0; i < arrRemoveOccurrenceString.size(); i++) {
+    		arrRemoveOccurrenceString[i] = arrRemoveOccurrenceString[i].replace('a', strReplacement);
     	}
     	return null;
     }

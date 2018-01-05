@@ -1,9 +1,27 @@
+/**
+*  ================================================================================================
+*   Version    Date          Author                        Comment
+*  ================================================================================================
+*   v1.0     Jan-5-2018   Manish Patil  	Programmatic Model - 1 SOQL Assignment code 
+*/
 public with sharing class PM1_SOQLController {
 	
 	public PM1_SOQLController() {
     	opportunityMap = new Map<Id, Id>();
     	opportunityMapKeyNames = new Set<Id>();
     	lstAccount = new List<Account>();
+    	mapAccountOpportunities = new Map<Id, List<Id>>();
+    	lstAccountOpportunities = new Set<Id>();
+    	lstOpportunity  = new List<Opportunity>();
+    	lstConatctUpdatedToday =new List<Contact>(); 
+    	lstAccountSosl = new List<Account>(); 
+		lstContactSosl = new List<Contact>();
+		lstLeadSosl = new List<Lead>();
+    	
+    	sortingOptions= new List<SelectOption>();
+    	sortingOptions.add(new SelectOption('ASC', System.Label.Ascending));
+    	sortingOptions.add(new SelectOption('DESC', System.Label.Descending));
+    	radioSortingSelection = 'ASC';
     }
     
     public Map<Id, Id> opportunityMap { get; set;}  
@@ -11,7 +29,17 @@ public with sharing class PM1_SOQLController {
     
     public Integer accountCount { get; set;}
     public List<Account> lstAccount { get; set;}
-    
+    public Map<Id, List<Id>> mapAccountOpportunities { get; set;}
+    public Set<Id> lstAccountOpportunities { get; set;}
+	public String radioSortingSelection { get; set;}
+	public List<SelectOption> sortingOptions  { get; set;}
+	public List<Opportunity> lstOpportunity  { get; set;}
+	public List<Contact> lstConatctUpdatedToday { get; set;} 
+       
+    public String searchStringSoql { get; set;}
+	public List<Account> lstAccountSosl { get; set;}
+	public List<Contact> lstContactSosl { get; set;}
+	public List<Lead> lstLeadSosl { get; set;}
     /**
     * Method to fetch opportunities whose stage is closed and account is not null
     **/
@@ -40,5 +68,60 @@ public with sharing class PM1_SOQLController {
     	}
     	Database.update(lstAccount);
     	return null;
+    }
+    
+    /**
+    * Method to get Accounts wil opportunities
+    **/
+    public PageReference queryAccountOpportunity() {
+    	for(Account accountObj : [SELECT Id, (SELECT Name FROM Opportunities) FROM Account]) {
+		    for(Opportunity oppObj : accountObj.opportunities){
+		        if(mapAccountOpportunities.containsKey(accountObj.Id)){
+					List<Id> opportunityIdList = mapAccountOpportunities.get(accountObj.Id);
+		            opportunityIdList.add(oppObj.Id);
+		            mapAccountOpportunities.put(accountObj.Id, opportunityIdList);
+		        }
+		        else {
+		            mapAccountOpportunities.put(accountObj.Id, new List<id> { oppObj.Id });
+		        }
+		    }
+		}
+		lstAccountOpportunities = mapAccountOpportunities.keySet();
+		return null;
+    }
+    
+    /**
+    * Method to get 10 campaigns and sort order will be selected by the user
+    **/
+    public PageReference query10Campaigns() {
+    	String query = System.Label.SelectOpportunityName
+    					+ ' ORDER BY Name '
+    					+ radioSortingSelection +
+    					' LIMIT 10';
+    	lstOpportunity = Database.query(query);
+    	return null;
+    }
+    
+    /**
+    * Method to get contacts which were modified today
+    **/
+    public PageReference queryContactsModifiedToday() {
+    	lstConatctUpdatedToday = [SELECT Name FROM Contact WHERE LastModifiedDate = Today];
+    	return null;
+    }
+    
+    /**
+    * Method to get records from Account, Contact and Leads where searchstring is matched in 
+    * Name/First Name/Last Name
+    **/
+    public PageReference querySOSL() {
+    	List<List<sObject>> lstSearchResult = [FIND :searchStringSoql IN ALL FIELDS 
+    										   RETURNING Account(Name), 
+    										   			 Contact(FirstName, LastName),
+    										   			 Lead(FirstName, LastName)];
+		lstAccountSosl = ((List<Account>)lstSearchResult[0]);
+		lstContactSosl= ((List<Contact>)lstSearchResult[1]);
+		lstLeadSosl = ((List<Lead>)lstSearchResult[2]);
+		return null;
     }
 }

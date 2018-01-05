@@ -27,7 +27,10 @@
 		<div class="col-half">
 			<apex:pageBlock title="Check Palindrome String" id="palindromePageBlock">
 				<apex:pageBlockSection >
-					<apex:inputText value="{! strPalindrome }" id="txtPalindrome" label="Enter String">
+					<apex:inputText 
+						value="{! strPalindrome }" 
+						id="txtPalindrome" 
+						label="Enter String">
 					</apex:inputText>
 				</apex:pageBlockSection>
 				<apex:pageBlockButtons >
@@ -51,7 +54,10 @@
 					</apex:commandButton>
 				</apex:pageBlockSection>
 				<apex:pageBlockSection >
-					<apex:inputText value="{! strReplacement }" id="txtReplacement" label="Replacement">
+					<apex:inputText 
+						value="{! strReplacement }" 
+						id="txtReplacement" 
+						label="Replacement">
 					</apex:inputText>
 				</apex:pageBlockSection>
 				<apex:repeat value="{! arrRemoveOccurrenceString }" var="valRemoveOccurrenceString">
@@ -69,9 +75,9 @@
 				<apex:pageBlockSection >
 					<apex:inputText value="{! strFindLength }" id="txtFindLength" label="Enter String">
 					</apex:inputText>
-					<apex:commandButton action="{! addInRemoveOccurrenceString }" value="Add"
+					<!-- <apex:commandButton action="{! addInRemoveOccurrenceString }" value="Add"
 						id="searchBtn" 
-						styleClass="hiddenButton" />
+						styleClass="hiddenButton" /> -->
 					<apex:outputText value="{! lengthOfString }" />
 				</apex:pageBlockSection>
 				<apex:pageBlockButtons >
@@ -84,7 +90,10 @@
 		<div class="col-half">
 			<apex:pageblock title="Get unique numbers">
 				<apex:pageBlockSection >
-					<apex:inputText value="{! numberInputForArray }" id="txtFindUnique" label="Enter Number">
+					<apex:inputText 
+						value="{! numberInputForArray }" 
+						id="txtFindUnique" 
+						label="Enter Number">
 					</apex:inputText>
 					<apex:commandButton action="{! addInArrOfNumbersInput }" value="Add"
 						id="addNumberBtn" />
@@ -106,8 +115,10 @@
 		<div class="col-half">
 			<apex:pageblock title="Get Derived class number">
 				<apex:pageBlockSection>
-				<apex:inputText value="{! numberForClasses  }" id="txtNumberForClasses" label="Enter Number" >
-					</apex:inputText>
+				<apex:inputText value="{! numberForClasses  }" 
+					id="txtNumberForClasses" 
+					label="Enter Number" >
+				</apex:inputText>
 				</apex:pageBlockSection>
 
 				<apex:pageBlockButtons >
