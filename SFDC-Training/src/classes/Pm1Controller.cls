@@ -48,12 +48,12 @@ public with sharing class Pm1Controller {
     	}
     	if(isPrime) {
     		ApexPages.AddMessage(
-    			new Apexpages.Message(ApexPages.Severity.CONFIRM, System.Label.Is_Prime_Number)
+    			new Apexpages.Message(ApexPages.Severity.CONFIRM,'Number is a prime number')
     		);
     	}
     	else {
     		ApexPages.AddMessage(
-    			new Apexpages.Message(ApexPages.Severity.FATAL, System.Label.Is_Not_Prime_Number)
+    			new Apexpages.Message(ApexPages.Severity.FATAL,'Number is not a prime number')
     		);
     	}
     	return null;
@@ -66,12 +66,12 @@ public with sharing class Pm1Controller {
     	pagereference pageReferenceObj = apexpages.Currentpage();
     	if(strPalindrome.equalsIgnoreCase(strPalindrome.reverse())){
     		ApexPages.AddMessage(
-    			new Apexpages.Message(ApexPages.Severity.CONFIRM, System.Label.IsPallindromeString)
+    			new Apexpages.Message(ApexPages.Severity.CONFIRM,'String is palindrome.')
     		);
     	}
     	else {
     		ApexPages.AddMessage(
-    			new Apexpages.Message(ApexPages.Severity.FATAL, System.Label.IsNotPallindrome)
+    			new Apexpages.Message(ApexPages.Severity.FATAL,'String is not palindrome.')
     		);
     	}
     	return null;
@@ -94,7 +94,7 @@ public with sharing class Pm1Controller {
     public PageReference addInRemoveOccurrenceString(){
     	pagereference pageReferenceObj = apexpages.Currentpage();
     	arrRemoveOccurrenceString.add(strRemoveOccurrence);
-    	ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.CONFIRM, System.Label.StringAdded));
+    	ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.CONFIRM,'String Added'));
     	return null;
     }
     
@@ -104,6 +104,13 @@ public with sharing class Pm1Controller {
     public PageReference getStringLength(){
     	Integer[] charArrayOfString = strFindLength.getChars();
     	lengthOfString = charArrayOfString.size();
+    	/*
+	    	Integer counter=0;
+	    	while(strFindLength.charAt(counter) != null) {
+	    		counter++;
+	    	}
+	    	lengthOfString = counter;
+    	*/
     	return null;
     }
     
@@ -121,7 +128,7 @@ public with sharing class Pm1Controller {
     public PageReference addInArrOfNumbersInput() {
     	pagereference pageReferenceObj = apexpages.Currentpage();
     	arrOfNumbersInput.add(numberInputForArray);
-    	ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.CONFIRM, System.Label.NumberAdded));
+    	ApexPages.AddMessage(new Apexpages.Message(ApexPages.Severity.CONFIRM,'Number added'));
     	return null;
     }
     

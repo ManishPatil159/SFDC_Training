@@ -14,7 +14,7 @@ public abstract with sharing class Pm1_BaseClass {
     public Pm1_BaseClass(Integer initializeNumberInput) {
     	numberInput = initializeNumberInput;
     }
-    
+
     /**
     * Abstract method example
     **/

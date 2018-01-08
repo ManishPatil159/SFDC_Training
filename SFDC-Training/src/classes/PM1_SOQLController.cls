@@ -17,6 +17,7 @@ public with sharing class PM1_SOQLController {
     	lstAccountSosl = new List<Account>(); 
 		lstContactSosl = new List<Contact>();
 		lstLeadSosl = new List<Lead>();
+		lstPersonalAccounts = new List<Account>(); 
     	
     	sortingOptions= new List<SelectOption>();
     	sortingOptions.add(new SelectOption('ASC', System.Label.Ascending));
@@ -40,6 +41,7 @@ public with sharing class PM1_SOQLController {
 	public List<Account> lstAccountSosl { get; set;}
 	public List<Contact> lstContactSosl { get; set;}
 	public List<Lead> lstLeadSosl { get; set;}
+	public List<Account> lstPersonalAccounts { get; set;}
     /**
     * Method to fetch opportunities whose stage is closed and account is not null
     **/
@@ -123,5 +125,13 @@ public with sharing class PM1_SOQLController {
 		lstContactSosl= ((List<Contact>)lstSearchResult[1]);
 		lstLeadSosl = ((List<Lead>)lstSearchResult[2]);
 		return null;
+    }
+    
+    /**
+    * Method to get personal accounts
+    **/
+    public PageReference queryPersonalAccounts() {
+    	lstPersonalAccounts = [SELECT Name FROM Account WHERE Is_Persoanl_Account__c = true];
+    	return null;
     }
 }

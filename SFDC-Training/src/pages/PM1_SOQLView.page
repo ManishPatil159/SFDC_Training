@@ -1,8 +1,8 @@
 <apex:page controller="PM1_SOQLController">
-	<apex:form>
+	<apex:form >
 		
 		<!-- Query Opportunities -->
-		<apex:pageBlock>
+		<apex:pageBlock >
 		<!-- <apex:repeat value="{!opportunityMapKeyNames }" var="key">
 				<apex:outputText value="{!key} * " />
 				<apex:outputText value="{! opportunityMap[key] }"/>
@@ -26,7 +26,7 @@
 		</apex:pageBlock>
 		
 		<!-- Account + Opportunity -->
-		<apex:pageBlock>
+		<apex:pageBlock >
 			<apex:commandButton action="{! queryAccountOpportunity }"  
 				value="Get Accouts + Opportunities"/>
 				
@@ -52,7 +52,7 @@
 		
 		<!-- Sorting -->
 		<apex:pageBlock title="Sorting">
-			<apex:pageBlockSection>
+			<apex:pageBlockSection >
 				<apex:selectRadio value="{! radioSortingSelection }">
 		            <apex:selectOptions value="{! sortingOptions }"/>
         	    </apex:selectRadio>
@@ -74,7 +74,7 @@
 		
 		<!-- modified contacts -->
 		<apex:pageBlock title="Contacts modified today">
-			<apex:pageBlockSection>
+			<apex:pageBlockSection >
 				<apex:commandButton action="{! queryContactsModifiedToday }" value="Get Contacts"/>
         	    
         	    <apex:pageBlockTable value="{! lstConatctUpdatedToday }" var="item" >
@@ -93,8 +93,8 @@
 		
 		<!-- SOSL Queries -->
 		<apex:pageBlock title="SOSL queries">
-			<apex:pageBlockSection>
-				<apex:inputText value = "{! searchStringSoql }" label = "Enter search string" />
+			<apex:pageBlockSection >
+				<apex:inputText value="{! searchStringSoql }" label="Enter search string" />
 				<apex:commandButton action="{! querySOSL }" value="Search"/>
 			</apex:pageBlockSection>
 			<apex:pageBlockSection title="Accounts">
@@ -140,6 +140,25 @@
 		                        {! item.LastName }
 		            </apex:column>
 				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		
+		<!-- Personal Accounts -->
+		<apex:pageBlock title="Personal Accounts">
+			<apex:pageBlockSection >
+				<apex:commandButton action="{! queryPersonalAccounts}" value="Get Personal Accounts"/>
+        	    
+        	    <apex:pageBlockTable value="{! lstPersonalAccounts }" var="item" >
+				 <apex:column >
+	                <apex:facet name="header">Id</apex:facet>
+	                        {! item.Id }
+	            </apex:column>
+	            <apex:column >
+	                <apex:facet name="header">Name</apex:facet>
+	                        {! item.Name }
+	            </apex:column>
+			</apex:pageBlockTable>
+        	    
 			</apex:pageBlockSection>
 		</apex:pageBlock>
 		

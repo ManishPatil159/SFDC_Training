@@ -27,8 +27,7 @@
 		<div class="col-half">
 			<apex:pageBlock title="Check Palindrome String" id="palindromePageBlock">
 				<apex:pageBlockSection >
-					<apex:inputText 
-						value="{! strPalindrome }" 
+					<apex:inputText value="{! strPalindrome }" 
 						id="txtPalindrome" 
 						label="Enter String">
 					</apex:inputText>
@@ -54,8 +53,7 @@
 					</apex:commandButton>
 				</apex:pageBlockSection>
 				<apex:pageBlockSection >
-					<apex:inputText 
-						value="{! strReplacement }" 
+					<apex:inputText value="{! strReplacement }" 
 						id="txtReplacement" 
 						label="Replacement">
 					</apex:inputText>
@@ -90,8 +88,7 @@
 		<div class="col-half">
 			<apex:pageblock title="Get unique numbers">
 				<apex:pageBlockSection >
-					<apex:inputText 
-						value="{! numberInputForArray }" 
+					<apex:inputText value="{! numberInputForArray }" 
 						id="txtFindUnique" 
 						label="Enter Number">
 					</apex:inputText>
@@ -114,7 +111,7 @@
 		<!-- derived class -->
 		<div class="col-half">
 			<apex:pageblock title="Get Derived class number">
-				<apex:pageBlockSection>
+				<apex:pageBlockSection >
 				<apex:inputText value="{! numberForClasses  }" 
 					id="txtNumberForClasses" 
 					label="Enter Number" >
