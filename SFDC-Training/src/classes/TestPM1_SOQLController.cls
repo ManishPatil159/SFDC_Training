@@ -18,50 +18,51 @@
  * the organization size limit for all Apex scripts.
  *
  * See the Apex Language Reference for more information about Testing and Code Coverage.
+ *  ================================================================================================
+ *   Version    Date          Author                        Comment
+ *  ================================================================================================
+ *   v1.0     Jan-08-2018   Manish Patil  	Test class for Pm1SOQLController
+ * 											(Programatic model 1 assignment)
  */
 @isTest
 private class TestPM1_SOQLController {
-	
+	/*
+	* Method to initialize the test data
+	*/
 	@TestSetup
     static void initializeData() {
         List<Account> accountList = new List<Account>();
         List<Opportunity> opportunityList = new List<Opportunity>();
+        List<Campaign> campaignList = new List<Campaign>();
+        List<Contact> contactList = new List<Contact>();
+        List<Lead> leadList = new List<Lead>();
 		        
+		// Create Accounts
         for(Integer i = 0; i< 250; i++ ) {
         	accountList.add(new Account(Name='Account - '+ i));
         }
         insert accountList;
         
-        for(Integer i = 0; i< 250; i++ ) {
-        	if(math.mod(i,2)==0) {
-        		opportunityList.add(new Opportunity(
-        								Name='Opportunity - '+ i, 
-        								CloseDate = Date.newInstance(2018, 12, 17), 
-        								StageName = 'Closed Won',
-        								AccountId = accountList[i].Id
-        							));
-        	}
-        	else if(math.mod(i,3)==0) {
-        		System.debug(accountList[i].Id);
-        		opportunityList.add(new Opportunity(
-        								Name='Opportunity - '+ i, 
-        								CloseDate = Date.newInstance(2018, 12, 17), 
-        								StageName = 'Closed Lost',
-        								AccountId = accountList[i].Id
-        							));
-        	}
-        	else {
-        		opportunityList.add(new Opportunity(
-        								Name='Opportunity - '+ i, 
-        								CloseDate = Date.newInstance(2018, 12, 17), 
-        								StageName = 'Prospecting',
-        								AccountId = accountList[i].Id
-        							));
-        	}
-        }
+        // Create Opportunities
+        opportunityList = createOpportunities(accountList);
         insert opportunityList;
+        
+        //create campaigns
+        campaignList = createCampaigns();
+        insert campaignList;
+        
+        //create Contacts
+        contactList = createContacts(accountList);
+        insert contactList;
+        
+        //create Leads
+        leadList = createLeads();
+        insert leadList;
     }
     
+    /**
+    * Method to test queryOpportunities function in PM1_SOQLController
+    **/
     @isTest
     private static void TestQueryOpportunities() {
     	PM1_SOQLController controllerObj = new PM1_SOQLController();
@@ -83,6 +84,9 @@ private class TestPM1_SOQLController {
     	System.Assert(expectedOpportunityMap.equals(controllerObj.opportunityMap), 'Check generated map');
     }
     
+    /**
+    * Method to test queryAccounts function in PM1_SOQLController
+    **/
     @isTest
     private static void TestQueryAccounts() {
     	PM1_SOQLController controllerObj = new PM1_SOQLController();
@@ -118,6 +122,9 @@ private class TestPM1_SOQLController {
     	System.assertEquals(0, countAfterUpdate);
     }
     
+    /**
+    * Method to test queryPersonalAccounts function in PM1_SOQLController
+    **/
     @isTest
     private static void TestQueryPersonalAccounts() {
     	PM1_SOQLController controllerObj = new PM1_SOQLController();
@@ -129,6 +136,165 @@ private class TestPM1_SOQLController {
     	for(Integer i = 0; i< expectedLstPersonalAccounts.size(); i++ ) {
     		System.assertEquals(expectedLstPersonalAccounts[i].Id, controllerObj.lstPersonalAccounts[0].Id);
     	}
+    }
+    
+    /**
+    * Method to test queryAccountOpportunity function in PM1_SOQLController
+    **/
+    @isTest
+    private static void TestQueryAccountOpportunity() {
+    	PM1_SOQLController controllerObj = new PM1_SOQLController();
+    	List<Account> expectedLstAccount = [SELECT Id, (SELECT Name FROM Opportunities) FROM Account];
+    	
+    	Test.startTest();
+    	controllerObj.queryAccountOpportunity();
+    	
+    	for(Account accountObj : expectedLstAccount) {
+    		System.assert(controllerObj.mapAccountOpportunities.containsKey(accountObj.Id), 'Account Id exists in keys');
+    		List<Id> opportunityIdList = controllerObj.mapAccountOpportunities.get(accountObj.Id);
+    		opportunityIdList.equals(accountObj.opportunities);
+    	}  
+    	Test.stopTest();
+    	
+    }
+    
+    /**
+    * Method to test query10Campaigns function in PM1_SOQLController (Ascending order)
+    **/
+    @isTest
+    private static void TestQuery10CampaignsAsc() {
+    	PM1_SOQLController controllerObj = new PM1_SOQLController();
+    	String query = System.Label.CMSelectQuery + ' ORDER BY Name ASC LIMIT 10';
+    	List<Campaign> expectedLstCampaign = Database.query(query);
+    	
+    	Test.startTest();
+    	controllerObj.query10Campaigns();
+    	Test.stopTest();
+    	
+    	System.assert(expectedLstCampaign.equals(controllerObj.lstCampaign), '10 campaigns queried in ASC');
+    }
+    
+    /**
+    * Method to test query10Campaigns function in PM1_SOQLController (Descending Order)
+    **/
+    @isTest
+    private static void TestQuery10CampaignsDesc() {
+    	PM1_SOQLController controllerObj = new PM1_SOQLController();
+    	String query = System.Label.CMSelectQuery + ' ORDER BY Name DESC LIMIT 10';
+    	List<Campaign> expectedLstCampaign = Database.query(query);
+    	
+    	Test.startTest();
+    	controllerObj.radioSortingSelection = 'DESC';
+    	controllerObj.query10Campaigns();
+    	Test.stopTest();
+    	
+    	System.assert(expectedLstCampaign.equals(controllerObj.lstCampaign), '10 campaigns queried in ASC');
+    }
+    
+    /**
+    * Method to test ueryContactsModifiedToday function in PM1_SOQLController
+    **/
+    @isTest
+    private static void TestQueryContactsModifiedToday() {
+    	PM1_SOQLController controllerObj = new PM1_SOQLController();
+    	List<Contact> expectedContactLst = [SELECT Name FROM Contact  WHERE LastModifiedDate = Today];
+    	
+    	Test.startTest();
+    	controllerObj.queryContactsModifiedToday();
+    	Test.stopTest();
+    	
+    	System.assertEquals(expectedContactLst.size(), controllerObj.lstConatctUpdatedToday.size(), 'one record is modified today');
+    	System.assert(expectedContactLst.equals(controllerObj.lstConatctUpdatedToday), 'Same object is retrieved');
+    }
+    
+    /**
+    * Method to test querySOSL function in PM1_SOQLController
+    **/
+    @isTest
+    private static void TestQuerySOSL() {
+    	PM1_SOQLController controllerObj = new PM1_SOQLController();
+    	String searchString = 'Account - 2';
+    	List<List<sObject>> lstSearchResult = [FIND :searchString IN ALL FIELDS 
+    										   RETURNING Account(Name), 
+    										   			 Contact(FirstName, LastName),
+    										   			 Lead(FirstName, LastName)];
+		Test.startTest();
+		controllerObj.searchStringSoql = searchString;
+		controllerObj.querySOSL();
+		Test.stopTest();
+		System.assert(((List<Account>)lstSearchResult[0]).equals(controllerObj.lstAccountSosl),'compare accounts');
+		System.assert(((List<Contact>)lstSearchResult[1]).equals(controllerObj.lstContactSosl),'compare accounts');
+		System.assert(((List<Lead>)lstSearchResult[2]).equals(controllerObj.lstLeadSosl),'compare accounts');
+    }
+    
+    
+    /*
+    * Create Opportunities for test data
+    */
+    private static List<Opportunity> createOpportunities(List<Account> accountList) {
+    	List<Opportunity> opportunityList = new List<Opportunity>();
+    	for(Integer i = 0; i< 250; i++ ) {
+        	if(math.mod(i,2)==0) {
+        		opportunityList.add(new Opportunity(
+        								Name='Opportunity - '+ i, 
+        								CloseDate = Date.newInstance(2018, 12, 17), 
+        								StageName = 'Closed Won',
+        								AccountId = accountList[i].Id
+        							));
+        	}
+        	else if(math.mod(i,3)==0) {
+        		System.debug(accountList[i].Id);
+        		opportunityList.add(new Opportunity(
+        								Name='Opportunity - '+ i, 
+        								CloseDate = Date.newInstance(2018, 12, 17), 
+        								StageName = 'Closed Lost',
+        								AccountId = accountList[i].Id
+        							));
+        	}
+        	else {
+        		opportunityList.add(new Opportunity(
+        								Name='Opportunity - '+ i, 
+        								CloseDate = Date.newInstance(2018, 12, 17), 
+        								StageName = 'Prospecting',
+        								AccountId = accountList[i].Id
+        							));
+        	}
+        }
+        opportunityList.add(new Opportunity(
+        								Name='Opportunity - Redundant', 
+        								CloseDate = Date.newInstance(2018, 12, 17), 
+        								StageName = 'Prospecting',
+        								AccountId = accountList[0].Id
+        							));
+		return opportunityList;
+    }
+    
+    private static List<Campaign> createCampaigns() {
+    	List<Campaign> lstCampaignsCreated = new List<Campaign>();
+    	for(Integer i = 0; i < 50; i++) {
+    		lstCampaignsCreated.add(new Campaign(Name = 'Campaign - ' + i));
+    	}
+    	return lstCampaignsCreated;
+    }
+    
+    private static List<Contact> createContacts(List<Account> accountList) {
+    	List<Contact> lstContactsCreated = new List<Contact>();
+    	for(Integer i = 0; i < 50; i++) {
+    		lstContactsCreated.add(new Contact(LastName = 'Contact - ' + i, AccountId = accountList[i].Id));
+    	}
+    	return lstContactsCreated;
+    }
+    
+    private static List<Lead> createLeads() {
+    	List<Lead> lstLeadsCreated = new List<Lead>();
+    	for(Integer i = 0; i < 50; i++) {
+    		lstLeadsCreated.add(new Lead(
+    								LastName = 'Lead - ' + i, 
+    								Company = 'ESPL', 
+    								Status = 'Open - Not Contacted')
+    		);
+    	}
+    	return lstLeadsCreated;
     }
     
 }

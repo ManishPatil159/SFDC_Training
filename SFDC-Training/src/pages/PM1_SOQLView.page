@@ -58,7 +58,7 @@
         	    </apex:selectRadio>
         	    <apex:commandButton action="{! query10Campaigns }" value="Get Campaigns"/>
         	    
-        	    <apex:pageBlockTable value="{! lstOpportunity }" var="item" >
+        	    <apex:pageBlockTable value="{! lstCampaign }" var="item" >
 				 <apex:column >
 	                <apex:facet name="header">Id</apex:facet>
 	                        {! item.Id }

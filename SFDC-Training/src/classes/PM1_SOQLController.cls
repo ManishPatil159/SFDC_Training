@@ -12,7 +12,7 @@ public with sharing class PM1_SOQLController {
     	lstAccount = new List<Account>();
     	mapAccountOpportunities = new Map<Id, List<Id>>();
     	lstAccountOpportunities = new Set<Id>();
-    	lstOpportunity  = new List<Opportunity>();
+    	lstCampaign  = new List<Campaign>();
     	lstConatctUpdatedToday =new List<Contact>(); 
     	lstAccountSosl = new List<Account>(); 
 		lstContactSosl = new List<Contact>();
@@ -34,7 +34,7 @@ public with sharing class PM1_SOQLController {
     public Set<Id> lstAccountOpportunities { get; set;}
 	public String radioSortingSelection { get; set;}
 	public List<SelectOption> sortingOptions  { get; set;}
-	public List<Opportunity> lstOpportunity  { get; set;}
+	public List<Campaign> lstCampaign  { get; set;}
 	public List<Contact> lstConatctUpdatedToday { get; set;} 
        
     public String searchStringSoql { get; set;}
@@ -96,11 +96,11 @@ public with sharing class PM1_SOQLController {
     * Method to get 10 campaigns and sort order will be selected by the user
     **/
     public PageReference query10Campaigns() {
-    	String query = System.Label.SelectOpportunityName
+    	String query = System.Label.CMSelectQuery
     					+ ' ORDER BY Name '
     					+ radioSortingSelection +
     					' LIMIT 10';
-    	lstOpportunity = Database.query(query);
+    	lstCampaign = Database.query(query);
     	return null;
     }
     

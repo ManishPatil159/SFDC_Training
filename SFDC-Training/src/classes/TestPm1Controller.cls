@@ -27,16 +27,10 @@
  */
 @isTest
 private class TestPm1Controller {
-
-    static testMethod void TestPm1Controller() {
-       
-    }
-
-	@TestSetup
-	static void initializeTest() {
-	
-	}
-	
+    
+	/**
+	* Test method to check if number is prime
+	**/	
 	@isTest
 	private static void TestIsPrimeFunctionality() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -61,6 +55,9 @@ private class TestPm1Controller {
 		
 	}
 	
+	/**
+	* Test method to check if number is prime
+	**/
 	@isTest
 	private static void TestIsNotPrimeFunctionality() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -82,6 +79,9 @@ private class TestPm1Controller {
         System.assert(isNotPrimeMessage, 'Message not present');
 	}
 	
+	/**
+	* Method to test if the number is palindrome
+	**/
 	@isTest
 	private static void TestIsPalindrome() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -103,6 +103,9 @@ private class TestPm1Controller {
         System.assert(isPalindromeMessage, 'Message not present');
 	}
 	
+	/**
+	* Method to test if the number is not pallindrome
+	**/
 	@isTest
 	private static void TestIsNotPalindrome() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -124,6 +127,9 @@ private class TestPm1Controller {
         System.assert(isPalindromeMessage, 'Message not present');
 	}
 	
+	/**
+	* Method to test replace occurrances functioanlity
+	**/ 
 	@isTest
 	private static void TestReplaceOccurrences() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -147,6 +153,9 @@ private class TestPm1Controller {
 		}
 	}
 	
+	/**
+	* Method to test functioanlity to get string length 
+	**/
 	@isTest
 	private static void TestGetStringLength() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -159,6 +168,9 @@ private class TestPm1Controller {
 		System.assertEquals(stringToFindLength.length(), pm1ControllerObj.lengthOfString, 'Check if length is same');
 	}
 	
+	/**
+	* Method to test functionality to return unique numbers from list 
+	*/
 	@isTest
 	private static void TestGetUniqueNumbers() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
@@ -185,6 +197,9 @@ private class TestPm1Controller {
 			'Check if items are unique');
 	}
 	
+	/**
+	* Method to test overriding functioanlity
+	**/
 	@isTest
 	private static void TestInitializeDerived() {
 		Pm1Controller pm1ControllerObj = new Pm1Controller();
