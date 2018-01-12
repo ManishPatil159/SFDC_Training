@@ -20,6 +20,7 @@ public with sharing class PM2_SOQLController {
 		lstOpportunity = new List<Opportunity>();
 		lstEnrollMentYearSelected = new List<String>();
 		mapOpportunitiesAggregate = new Map<Integer,Decimal>(); 
+		mapLeadsByLeadSource = new Map<String, Integer>();
 		
 		lstEnrollMentYearUnSelected = new List<SelectOption>(); 
 		lstEnrollMentYearUnSelected.add(new SelectOption('2010', '2010'));
@@ -43,10 +44,10 @@ public with sharing class PM2_SOQLController {
     public List<Opportunity> lstOpportunity { get; set;}
     public List<SelectOption> lstEnrollMentYearUnSelected { get; set;}
     public Map<Integer,Decimal> mapOpportunitiesAggregate { get; set;}
+    public Map<String, Integer> mapLeadsByLeadSource { get; set;}
     
     public List<String> lstEnrollMentYearSelected  { get; set;}
-    
-    
+    public Integer leadSourceCount { get; set;}
     /**
     * Method to get all contacts
     **/
@@ -150,7 +151,8 @@ public with sharing class PM2_SOQLController {
 														CALENDAR_YEAR(closedate), 
 														SUM(Amount) 
 											    	FROM OPPORTUNITY 
-											    	WHERE CloseDate = LAST_FISCAL_YEAR 
+											    	// WHERE CloseDate = LAST_FISCAL_YEAR 
+											    	WHERE CloseDate = THIS_FISCAL_YEAR
 											    	GROUP BY closedate];
 		for (AggregateResult ar : aggregateOpportunities)  {
 			mapOpportunitiesAggregate.put(
@@ -159,5 +161,23 @@ public with sharing class PM2_SOQLController {
 			); 
 		}
 		return null;
+    }
+    
+    /**
+    * Method to get Leads By LeadSource where LeadSource has more than 10 Leads
+    **/
+    public PageReference getLeadsByLeadSourceCount() {
+    	mapLeadsByLeadSource.clear();
+    	AggregateResult[] aggregateLeads = [SELECT 
+    											LeadSource, 
+    											count(Name) 
+    										FROM Lead 
+    										GROUP BY LeadSource 
+    										HAVING COUNT(LeadSource) > :leadSourceCount];
+		for(AggregateResult ar : aggregateLeads) {
+			mapLeadsByLeadSource.put(String.valueOf(ar.get('LeadSource')), Integer.valueOf(ar.get('expr0')));
+		}
+		
+		return null;		
     }
 }

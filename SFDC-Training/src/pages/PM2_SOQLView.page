@@ -161,5 +161,50 @@
 		    </apex:pageBlockButtons>
 		</apex:pageBlock>
 		
+		<!-- Get all Opportunities -->
+		<apex:pageBlock title="All Closed Opportunities This FY">
+			<apex:pageBlockTable value="{! mapOpportunitiesAggregate }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Name
+	               	</apex:facet>
+	                   {! item }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Amount
+		            </apex:facet>
+		                {! mapOpportunitiesAggregate[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getOpportunitiyCount }"  value="Get Opportunities"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Opportunities -->
+		<apex:pageBlock title="All Leads By ">
+			<apex:pageBlockSection>
+				<apex:inputText value="{! leadSourceCount }" label="Lead Source Count To Filter" />
+			</apex:pageBlockSection>
+			<apex:pageBlockTable value="{! mapLeadsByLeadSource }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Lead Source
+	               	</apex:facet>
+	                   {! item }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Count
+		            </apex:facet>
+		                {! mapLeadsByLeadSource[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getLeadsByLeadSourceCount }"  value="Get Leads"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
 	</apex:form>
 </apex:page>
