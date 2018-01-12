@@ -182,8 +182,8 @@
 		    </apex:pageBlockButtons>
 		</apex:pageBlock>
 		
-		<!-- Get all Opportunities -->
-		<apex:pageBlock title="All Leads By ">
+		<!-- Get all Leads -->
+		<apex:pageBlock title="All Leads By Lead Source">
 			<apex:pageBlockSection>
 				<apex:inputText value="{! leadSourceCount }" label="Lead Source Count To Filter" />
 			</apex:pageBlockSection>
@@ -203,6 +203,27 @@
 			</apex:pageBlockTable>
 			<apex:pageBlockButtons >
 		    	<apex:commandButton action="{! getLeadsByLeadSourceCount }"  value="Get Leads"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Leads Grouped Deails -->
+		<apex:pageBlock title="All Leads By Status and Lead Source">
+			<apex:pageBlockTable value="{! mapLeadsbyLeadSourceDetail }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Status
+	               	</apex:facet>
+	                   {! item }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Lead Source and Count
+		            </apex:facet>
+		                {! mapLeadsbyLeadSourceDetail[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getLeadsByLeadSourceDetail }"  value="Get Leads"/>
 		    </apex:pageBlockButtons>
 		</apex:pageBlock>
 		

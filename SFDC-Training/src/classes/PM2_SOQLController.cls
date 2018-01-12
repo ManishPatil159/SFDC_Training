@@ -21,6 +21,7 @@ public with sharing class PM2_SOQLController {
 		lstEnrollMentYearSelected = new List<String>();
 		mapOpportunitiesAggregate = new Map<Integer,Decimal>(); 
 		mapLeadsByLeadSource = new Map<String, Integer>();
+		mapLeadsbyLeadSourceDetail = new Map<String,  Map<String, Integer>>();
 		
 		lstEnrollMentYearUnSelected = new List<SelectOption>(); 
 		lstEnrollMentYearUnSelected.add(new SelectOption('2010', '2010'));
@@ -45,6 +46,7 @@ public with sharing class PM2_SOQLController {
     public List<SelectOption> lstEnrollMentYearUnSelected { get; set;}
     public Map<Integer,Decimal> mapOpportunitiesAggregate { get; set;}
     public Map<String, Integer> mapLeadsByLeadSource { get; set;}
+    public Map<String,  Map<String, Integer>> mapLeadsbyLeadSourceDetail { get; set;}
     
     public List<String> lstEnrollMentYearSelected  { get; set;}
     public Integer leadSourceCount { get; set;}
@@ -176,6 +178,45 @@ public with sharing class PM2_SOQLController {
     										HAVING COUNT(LeadSource) > :leadSourceCount];
 		for(AggregateResult ar : aggregateLeads) {
 			mapLeadsByLeadSource.put(String.valueOf(ar.get('LeadSource')), Integer.valueOf(ar.get('expr0')));
+		}
+		
+		return null;		
+    }
+    
+    /**
+    * Method to write a SOQL query to find total number of Lead records by status Source. 
+	* Store this information in map information in map information in map and display the same.
+    **/
+    public PageReference getLeadsByLeadSourceDetail() {
+    	mapLeadsbyLeadSourceDetail.clear();
+    	AggregateResult[] aggregateLeads = [SELECT 
+    											status, 
+    											LeadSource, 
+    											count(name) 
+    										FROM Lead 
+    										GROUP BY LeadSource, status];
+    	Map<String, Integer> lstLEadSrc = new Map<String, Integer>();
+		for(AggregateResult ar : aggregateLeads) {
+			
+			if(mapLeadsbyLeadSourceDetail.containsKey(String.valueOf(ar.get('Status')))) {
+				lstLEadSrc = mapLeadsbyLeadSourceDetail.get(String.valueOf(ar.get('Status')));
+				lstLEadSrc.put(String.valueOf(ar.get('LeadSource')), Integer.valueOf(ar.get('expr0')));
+				
+				mapLeadsbyLeadSourceDetail.put(
+					String.valueOf(ar.get('Status')),
+					lstLEadSrc
+						 
+				);			
+			}
+			else{
+				mapLeadsbyLeadSourceDetail.put(
+					String.valueOf(ar.get('Status')),
+					new Map<String, Integer> {
+						String.valueOf(ar.get('LeadSource')) =>
+						Integer.valueOf(ar.get('expr0'))
+					}
+				);
+			}
 		}
 		
 		return null;		
