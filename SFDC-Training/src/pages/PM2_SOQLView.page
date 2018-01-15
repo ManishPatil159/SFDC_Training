@@ -227,5 +227,54 @@
 		    </apex:pageBlockButtons>
 		</apex:pageBlock>
 		
+		<!-- Get all Contacts-->
+		<apex:pageBlock title="Media's Contacts">
+			<apex:pageBlockTable value="{! lstContacts }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Contact Name
+	               	</apex:facet>
+	                   {! item.Name }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Account Name
+		            </apex:facet>
+		                {! item.Account.Name }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getContactsByIndustry }"  value="Get Contacts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all C records-->
+		<apex:pageBlock title="C records">
+			
+			C Name: <apex:outputText value="{! CObj.Name }" ></apex:outputText> <br />
+			A Name: <apex:outputText value="{! CObj.A__r.Name }" ></apex:outputText> <br />
+			B Name: <apex:outputText value="{! CObj.B__r.Name }" ></apex:outputText> <br />
+			
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getCRecords }"  value="Get C"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Create Leads and log errors-->
+		<apex:pageBlock title="Create Leads">
+			
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! createLeads }"  value="Create Leads"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Create Leads and log errors-->
+		<apex:pageBlock title="Delete Accounts Created in Last 90 Days">
+			
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! deleteAccounts }"  value="Delete Accounts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
 	</apex:form>
 </apex:page>

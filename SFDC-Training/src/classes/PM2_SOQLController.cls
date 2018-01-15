@@ -22,6 +22,9 @@ public with sharing class PM2_SOQLController {
 		mapOpportunitiesAggregate = new Map<Integer,Decimal>(); 
 		mapLeadsByLeadSource = new Map<String, Integer>();
 		mapLeadsbyLeadSourceDetail = new Map<String,  Map<String, Integer>>();
+		lstContacts = new List<Contact>();
+		lstAccountDeletion = new List<Account>();
+		//CObj = new C__c();
 		
 		lstEnrollMentYearUnSelected = new List<SelectOption>(); 
 		lstEnrollMentYearUnSelected.add(new SelectOption('2010', '2010'));
@@ -47,6 +50,10 @@ public with sharing class PM2_SOQLController {
     public Map<Integer,Decimal> mapOpportunitiesAggregate { get; set;}
     public Map<String, Integer> mapLeadsByLeadSource { get; set;}
     public Map<String,  Map<String, Integer>> mapLeadsbyLeadSourceDetail { get; set;}
+    public List<Contact> lstContacts { get; set;}
+    // public List<C__c> lstC { get; set;}
+    public C__c CObj { get; set;}
+    public List<Account> lstAccountDeletion { get; set;}
     
     public List<String> lstEnrollMentYearSelected  { get; set;}
     public Integer leadSourceCount { get; set;}
@@ -221,4 +228,99 @@ public with sharing class PM2_SOQLController {
 		
 		return null;		
     }
+    
+    /**
+    * Method to get contacts whose accounts have 'Media' Industry
+    **/
+    public PageReference getContactsByIndustry() {
+    	lstContacts = [ SELECT 
+	    					Name, 
+	    					Account.Name 
+    					FROM Contact 
+    					WHERE Account.Industry = 'Media'];
+    	return null;
+    }
+    
+    /**
+    * Mehotod to get C object records by Name 
+    **/
+    public PageReference getCRecords() {
+    	CObj = [SELECT 
+	    			Name, 
+	    			A__r.Name, 
+	    			B__r.Name 
+    			FROM C__c 
+    			WHERE Name__c = 'C1'];
+    	return null;
+    }
+    
+    /**
+    * Method to create 100 leads
+    **/
+    public PageReference createLeads() {
+    	List<Lead> lstLeadsCreated = new List<Lead>();
+    	List<Log__c> lstlog = new List<Log__c>();
+    	
+    	Database.DMLOptions dmo = new Database.DMLOptions();
+		dmo.assignmentRuleHeader.assignmentRuleId= '01Q7F000000tZiD';
+		Lead leadObj;
+	    for(Integer i = 0; i < 100; i++) {
+	    		if(i==3 || i == 23 || i == 49) {
+	    			leadObj = new Lead(
+		   							LastName = 'Lead - ' + i, 
+		   							Status = 'Open - Not Contacted');
+	    		}
+	    		else if(i==1 || i ==98) {
+	    			leadObj = new Lead(
+		   							LastName = 'Lead - ' + i, 
+		   							Company = 'ESPL', 
+		   							Status = 'Open - Not Contacted',
+		   							City='Pune');
+	    		}
+	    		else {
+	    			leadObj = new Lead(
+		   							LastName = 'Lead - ' + i, 
+		   							Company = 'ESPL', 
+		   							Status = 'Open - Not Contacted');
+	    		}
+	    	   	leadObj.setOptions(dmo);
+	    	   	lstLeadsCreated.add(leadObj);
+	    }
+	    Database.SaveResult[] srList = Database.insert(lstLeadsCreated, false);	    
+	    for (Database.SaveResult sr : srList) {
+	    	if (sr.isSuccess()) {
+		        // Operation was successful, so get the ID of the record that was processed
+		        System.debug('Successfully inserted account. Account ID: ' + sr.getId());
+		    }
+		    else {
+		    	for(Database.Error err : sr.getErrors()) {
+		    		lstlog.add(new Log__c(Error__c = err.getStatusCode() + ': ' + err.getMessage()));
+		    	}
+		    }
+	    }
+	    if(!lstlog.isEmpty()) {
+	    	insert lstlog;
+	    }
+	    return null;
+	}
+	
+	public PageReference deleteAccounts() {
+		lstAccountDeletion = [SELECT Id 
+											FROM Account 
+											WHERE CreatedDate = LAST_90_DAYS];
+		delete lstAccountDeletion;
+		return null;
+	}
+    
+    
+    /*
+    Parent To Child
+    	1. SELECT Account.Name, (SELECT Contact.Name FROM Account.Contacts) FROM Account WHERE Account.Name LIKE '%John%'
+		2. SELECT Name FROM Account WHERE Id IN (SELECT AccountId FROM Opportunity WHERE StageName='Closed Won')
+			-- SELECT Name, (Select Id, Name From Opportunities WHERE StageName='Closed Won') FROM Account 
+				Returns *all Accounts* and opportunities where StageName='Closed Won' So cannot be used
+		3. SELECT Name FROM A__c WHERE Id in (SELECT A__c FROM C__c WHERE Name__c like '%John%')
+	SOSL
+		FIND {*test*} IN NAME FIELDS RETURNING Account(Name), Contact(Id, Name), Lead(Name), User(Name)
+    */
 }
