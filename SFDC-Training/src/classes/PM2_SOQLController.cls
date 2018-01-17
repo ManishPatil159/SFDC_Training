@@ -1,4 +1,4 @@
- /**
+/**
  *  ================================================================================================
  *   Version    Date          Author                        Comment
  *  ================================================================================================
@@ -312,6 +312,46 @@ public with sharing class PM2_SOQLController {
 		return null;
 	}
     
+    public PageReference searchAccountsByName() {
+    	List<Account> lstAccountSearched = [ SELECT 
+    											Account.Name, 
+    											(SELECT Contact.Name 
+    											 FROM Account.Contacts) 
+    										 FROM Account 
+    										 WHERE Account.Name LIKE '%John%'];
+		return null;
+    }
+    
+    public PageReference getAccountsByOpportunities() {
+    	List<Account> lstAccountByOpportunity = [SELECT Name 
+    											 FROM Account 
+    											 WHERE Id IN (SELECT AccountId 
+    											 			  FROM Opportunity 
+    											 			  WHERE StageName='Closed Won')];
+		// SELECT Name, (Select Id, Name From Opportunities WHERE StageName='Closed Won') FROM Account 
+		// Returns *all Accounts* and opportunities where StageName='Closed Won' So cannot be used
+    	return null;
+    }
+    
+    public PageReference getAByC(){
+    	List<A__c> lstA = [SELECT Name 
+    					   FROM A__c 
+    					   WHERE Id in (SELECT A__c 
+			    					    FROM C__c 
+			    					    WHERE Name__c like '%John%')];
+		return null;
+    }
+    
+    public PageReference searchTestSOSL () {
+    	List<List<sObject>> lstSoslResult =  [FIND 'test' 
+    										  IN NAME FIELDS 
+    										  RETURNING 
+    										  	Account(Name), 
+    										  	Contact(Id, Name), 
+    										  	Lead(Name), 
+    										  	User(Name)];
+    	return null;
+    }
     
     /*
     Parent To Child

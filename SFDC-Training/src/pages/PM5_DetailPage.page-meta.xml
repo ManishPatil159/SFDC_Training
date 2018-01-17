@@ -3,7 +3,7 @@
     <apiVersion>36.0</apiVersion>
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>PM1_SOQLView</label>
+    <label>PM5_DetailPage</label>
     <packageVersions>
         <majorNumber>1</majorNumber>
         <minorNumber>15</minorNumber>

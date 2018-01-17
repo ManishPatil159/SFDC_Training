@@ -8,7 +8,7 @@
 		    display: none;
 		}
 	</style>
-	<apex:form>
+	<apex:form >
 		<!-- Get all contacts -->
 		<apex:pageBlock title="All Contact">
 				<apex:pageBlockTable value="{! lstAllContacts }" var="item" >
@@ -91,7 +91,7 @@
 		
 		<!-- Get all Accounts by Enrollment Year -->
 		<apex:pageBlock title="All Accounts By Enrollment Year">
-			<apex:pageBlockSection>
+			<apex:pageBlockSection >
 				<apex:selectList id="sel1" 
 					value="{! lstEnrollMentYearSelected }" 
 					multiselect="true" 
@@ -184,7 +184,7 @@
 		
 		<!-- Get all Leads -->
 		<apex:pageBlock title="All Leads By Lead Source">
-			<apex:pageBlockSection>
+			<apex:pageBlockSection >
 				<apex:inputText value="{! leadSourceCount }" label="Lead Source Count To Filter" />
 			</apex:pageBlockSection>
 			<apex:pageBlockTable value="{! mapLeadsByLeadSource }" var="item" >

@@ -1,0 +1,127 @@
+<apex:page StandardController="Account" extensions="PM5ControllerExtension">
+	<style>
+		[id*=panelAlphaSearch] {
+			width: 50%;
+		}
+	</style>
+	<apex:form id="formAccount">
+		<apex:actionFunction action="{! searchAccounts }" name="searchAccountsAction" rerender="divAccountList" />
+		<apex:actionFunction action="{! alphabeticalSearch }" name="searchAccountsAlphabeticallyAction" rerender="divAccountList" />
+		<apex:pageBlock title="Accounts" id="accountPageBlock">
+			<apex:pageBlockSection title="Search Accounts" id="searchSection" columns="4">
+				<apex:inputText value="{! searchString }" id="txtSearch" onkeypress="return checkEnterPress(event)" label="Search"></apex:inputText>
+				<apex:commandButton id="btnSearchAccount" onclick="return searchAccountsByName()"  value="Search" rerender="divAccountList"/>
+				<apex:commandButton id="btnClearSearch" action="{! clearSearch }"  value="Clear Search" rerender="divAccountList"/>
+
+				<apex:inputHidden value="{! searchString }" id="txtHiddenSearch"></apex:inputHidden>
+			</apex:pageBlockSection>
+			<apex:pageBlockSection id="panelAlphaSearch" columns="26">
+				<apex:commandLink id="lnkA" onClick="return filterByAlphabets('A');">A</apex:commandLink>
+				<apex:commandLink id="lnkB" onClick="return filterByAlphabets('B');">B</apex:commandLink>
+				<apex:commandLink id="lnkC" onClick="return filterByAlphabets('C');">C</apex:commandLink>
+				<apex:commandLink id="lnkD" onClick="return filterByAlphabets('D');">D</apex:commandLink>
+				<apex:commandLink id="lnkE" onClick="return filterByAlphabets('E');">E</apex:commandLink>
+				<apex:commandLink id="lnkF" onClick="return filterByAlphabets('F');">F</apex:commandLink>
+				<apex:commandLink id="lnkG" onClick="return filterByAlphabets('G');">G</apex:commandLink>
+				<apex:commandLink id="lnkH" onClick="return filterByAlphabets('H');">H</apex:commandLink>
+				<apex:commandLink id="lnkI" onClick="return filterByAlphabets('I');">I</apex:commandLink>
+				<apex:commandLink id="lnkJ" onClick="return filterByAlphabets('J');">J</apex:commandLink>
+				<apex:commandLink id="lnkK" onClick="return filterByAlphabets('K');">K</apex:commandLink>
+				<apex:commandLink id="lnkL" onClick="return filterByAlphabets('L');">L</apex:commandLink>
+				<apex:commandLink id="lnkM" onClick="return filterByAlphabets('M');">M</apex:commandLink>
+				<apex:commandLink id="lnkN" onClick="return filterByAlphabets('N');">N</apex:commandLink>
+				<apex:commandLink id="lnkO" onClick="return filterByAlphabets('O');">O</apex:commandLink>
+				<apex:commandLink id="lnkP" onClick="return filterByAlphabets('P');">P</apex:commandLink>
+				<apex:commandLink id="lnkQ" onClick="return filterByAlphabets('Q');">Q</apex:commandLink>
+				<apex:commandLink id="lnkR" onClick="return filterByAlphabets('R');">R</apex:commandLink>
+				<apex:commandLink id="lnkS" onClick="return filterByAlphabets('S');">S</apex:commandLink>
+				<apex:commandLink id="lnkT" onClick="return filterByAlphabets('T');">T</apex:commandLink>
+				<apex:commandLink id="lnkU" onClick="return filterByAlphabets('U');">U</apex:commandLink>
+				<apex:commandLink id="lnkV" onClick="return filterByAlphabets('V');">V</apex:commandLink>
+				<apex:commandLink id="lnkW" onClick="return filterByAlphabets('W');">W</apex:commandLink>
+				<apex:commandLink id="lnkX" onClick="return filterByAlphabets('X');">X</apex:commandLink>
+				<apex:commandLink id="lnkY" onClick="return filterByAlphabets('Y');">Y</apex:commandLink>
+				<apex:commandLink id="lnkZ" onClick="return filterByAlphabets('Z');">Z</apex:commandLink>
+			</apex:pageBlockSection>
+			
+			<apex:outputpanel id="divAccountList">
+				<apex:pageBlockTable value="{! lstAccount }" var="accountObj">
+					<apex:column >
+						<apex:outputLink target="_blank" value="PM5_DetailPage?id={! accountObj.Id }">{! accountObj.Name }</apex:outputLink>
+					</apex:column>
+					<apex:column value="{! accountObj.PersonEmail__c }"/>
+					<apex:column value="{! accountObj.Phone }"/>
+					<apex:column value="{! accountObj.Website }"/>
+					<apex:column >
+						<apex:commandLink onClick="return remotingMethod('{! accountObj.Id }');" rerender="divAccountList">Delete</apex:commandLink>
+					</apex:column>
+				</apex:pageBlockTable>
+			</apex:outputpanel>
+			<apex:pageBlockButtons >
+				<!-- <apex:commandButton action="{! saveAndRedirect }"  value="Manage Contacts"/> -->
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>
+	
+	<apex:image url="{!URLFOR($Resource.PM5JSResource, 'PM5JSResource/rawpixel-com-250087.jpg')}" width="50" height="50"/>
+	
+	<apex:includeScript value="{!URLFOR($Resource.PM5JSResource, 'PM5JSResource/PM5Script.js')}"/>
+	
+	<script type="text/javascript">
+		var txtSearch = document.getElementById('{! $Component.formAccount.accountPageBlock.searchSection.txtSearch }');
+		var txtHiddenSearch =  document.getElementById('{! $Component.formAccount.accountPageBlock.searchSection.txtHiddenSearch }');
+		var controllerDeleteAccount = {!$RemoteAction.PM5ControllerExtension.deleteAccount};
+		/*function checkEnterPress(event) {
+			if (event.keyCode == 13) {
+				searchAccountsByName();
+				return false;
+				
+			}
+		}
+		
+		function searchAccountsByName() {
+			if(validateSearchText()) {
+			 	searchAccountsAction();
+			}
+		}
+		
+		function filterByAlphabets(alphabet) {
+			var txtHiddenSearch =  document.getElementById('{! $Component.formAccount.accountPageBlock.searchSection.txtHiddenSearch }');
+			txtHiddenSearch.value=alphabet;
+			searchAccountsAlphabeticallyAction();
+			return false;
+		}
+		
+		function validateSearchText() {
+			var errMsg = 'Input at least 3 characters to perform search';
+			var txtSearch = document.getElementById('{! $Component.formAccount.accountPageBlock.searchSection.txtSearch }');
+			if(txtSearch.value && txtSearch.value.length >= 3) {
+				return true;
+			}
+			else {
+				alert(errMsg);
+				return false;
+			}
+		}
+		
+		function remotingMethod(accountId) {
+			Visualforce.remoting.Manager.invokeAction(
+				    '{!$RemoteAction.PM5ControllerExtension.deleteAccount}',
+				    accountId,
+				    function(result, event){
+				        if (event.status) {
+				            if(result) {
+				            	alert('Record deleted');
+				            	searchAccountsAction();
+				            }
+				        } else if (event.type === 'exception') {
+				            console.log(event.message + event.where);
+				        } else {
+				            console.log(event.message);;
+				        }
+				    },
+				    {escape: true}
+				);
+		}*/
+	</script>
+</apex:page>
