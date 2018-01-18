@@ -31,17 +31,35 @@ public class TestDataFactory {
 	* @param: 
 	* 	accountCount: number of accounts to create
 	**/
-	public static void createAccounts(Integer accountCount) {
+	public static List<Account> createAccounts(Integer accountCount) {
     	List<Account> lstAccount = new List<Account>();
     	for(Integer i = 0; i < accountCount; i++ ) {
     		lstAccount.add(
     			new Account(
     				Name = 'Account - '+ i,
-    				PersonEmail__c = 'email'+i+'@test.com',
+    				PersonEmail__c = 'email' + i + '@test' + i + '.com',
     				Website = 'https://website'+i+'.com'
     			)
     		);
     	}
-    	insert lstAccount;
+    	return lstAccount;    	
+    }
+    
+    /**
+	* Method to create contacts.
+	* @param: 
+	* 	contactCount: number of contacts to create
+	**/
+    public static List<Contact> createContacts(Integer contactCount) {
+    	List<Contact> lstContact = new List<contact>();
+    	for(Integer i =0; i < contactCount; i++) {
+    		lstContact.add(
+    			new Contact(
+    				LastName = 'LastName' + i, 
+    				Email = 'contactEmail' + i + '@test' + i + '.com'
+    			)
+    		);
+    	}
+    	return lstContact;
     }
 }

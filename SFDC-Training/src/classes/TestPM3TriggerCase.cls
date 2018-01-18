@@ -52,10 +52,10 @@ private class TestPM3TriggerCase {
 		
 		Id [] fixedSearchResults= new Id[200];
 		for(Integer i = 0; i< 100; i++ ) {
-			fixedSearchResults[i] = lstAccount[i].Id;
+			fixedSearchResults.add(lstAccount[i].Id);
 		}
 		for(Integer i = 0; i< 100; i++ ) {
-			fixedSearchResults[i] = lstContact[i].Id;
+			fixedSearchResults.add(lstContact[i].Id);
 		}
        	//fixedSearchResults[0] = '001x0000003G89h';
        	Test.setFixedSearchResults(fixedSearchResults);

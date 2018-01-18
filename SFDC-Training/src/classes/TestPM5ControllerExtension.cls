@@ -30,7 +30,8 @@ public class TestPM5ControllerExtension {
     
     @testSetup
     private static void initializeData() {
-    	TestDataFactory.createAccounts(200);
+    	List<Account> lstAccount = TestDataFactory.createAccounts(100);
+    	insert lstAccount;
     }
     
     /**
