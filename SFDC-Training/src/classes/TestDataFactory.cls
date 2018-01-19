@@ -62,4 +62,55 @@ public class TestDataFactory {
     	}
     	return lstContact;
     }
+    
+    /**
+    * Method to create accounts with contacts
+    **/
+    public static void createAccountWithContacts(Integer accountCount) {
+    	List<Account> lstAccount = new List<Account>();
+    	for(Integer i = 0; i < accountCount; i++ ) {
+    		lstAccount.add(
+    			new Account(
+    				Name = 'Account - '+ i,
+    				PersonEmail__c = 'email' + i + '@test' + i + '.com',
+    				Website = 'https://website'+i+'.com'
+    			)
+    		);
+    	}
+    	insert lstAccount;
+    	
+    	List<Contact> lstContact = new List<contact>();
+    	for(Integer i =0; i < accountCount; i++) {
+    		lstContact.add(
+    			new Contact(
+    				LastName = 'LastName' + i, 
+    				Email = 'contactEmail' + i + '@test' + i + '.com',
+    				AccountId = lstAccount[i].Id
+    			)
+    		);
+    	}
+    	lstContact.add(
+    			new Contact(
+    				LastName = 'LastName_new', 
+    				Email = 'contactEmail_new@test9999.com',
+    				AccountId = lstAccount[2].Id
+    			)
+    	);
+    	insert lstContact;
+    }
+    
+    /**
+    * Method to create leads
+    **/
+    public static void createLeads(Integer leadCount) {
+    	List<Lead> lstLead = new List<Lead>(); 
+    	for(Integer i = 0; i < leadCount; i++) {
+    		lstLead.add(
+    			new Lead(
+    				LastName = 'LastName' + i, 
+    				Company = 'Company-' + i, 
+    				Status = 'Open - Not Contacted'));
+    	}
+    	insert lstLead;
+    } 
 }
