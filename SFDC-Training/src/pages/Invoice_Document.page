@@ -1,7 +1,10 @@
-<apex:page standardController="Invoice_Statement__c">
+<apex:page standardController="Invoice_Statement__c" extensions="InvoiceDocumentExtension" showheader="false" sidebar="false">
 <!--<apex:page standardController="Invoice_Statement__c" renderAs="pdf">-->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
+	body {
+		    padding: 2% 5%;
+	}
 	* {
 	    box-sizing: border-box;
 	}
@@ -15,21 +18,18 @@
 	    float: left;
 	    width: 33.33%;
 	    padding: 10px;
-	    height: 300px; /* Should be removed. Only for demonstration */
 	}
 	
 	.column-half {
 	    float: left;
 	    width: 50%;
 	    padding: 10px;
-	    height: 300px; /* Should be removed. Only for demonstration */
 	}
 	
 	.column-full {
 	    float: left;
 	    width: 100%;
 	    padding: 10px;
-	    height: 300px; /* Should be removed. Only for demonstration */
 	}
 	
 	/* Clear floats after the columns */
@@ -56,6 +56,39 @@
 	.company-header {
 		font-size: large;
 	}
+	
+	/*[id$='pageBlockLinkeItems'] { */
+	.bPageBlock {
+    	border: none !important;
+	}
+	tr.headerRow th {
+    	background-color: #d2d9eb !important;
+	}
+	tr.headerRow th,
+	tr.dataRow td : {
+		border: 1px solid black !important;
+	}
+	
+	.totalRow {
+    	background-color: white !important;
+	}
+	.line-items-table {
+		min-height:200px;
+	}
+	.line-items-total .headerRow {
+    	display: none;
+	}
+	.amount-total {
+		width: 50%;
+    	display: inline-block;
+    	padding: 5px;
+	}
+	.align-right {
+		text-align: right;
+	}
+	.align-left {
+		text-align: left;
+	}
 </style>
 
 
@@ -64,63 +97,55 @@
 <div class="invoice-top">
 	<div class="row">
 		<div class="company-block column-half">
-			<span class="company-header">{! Invoice_Statement__c.Account__r.name }</span>
-			<div class="company-detail">
-				<span>{! Invoice_Statement__c.Account__r.BillingStreet },</span> <br />
-				<span>
-					{! Invoice_Statement__c.Account__r.BillingCity }, 
-					{! Invoice_Statement__c.Account__r.BillingState  }
-				</span><br />
-				<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
-			</div>
+			<apex:pageBlock>
+				<span class="company-header">{! Invoice_Statement__c.Account__r.name }</span>
+				<div class="company-detail">
+					<span>{! Invoice_Statement__c.Account__r.BillingStreet },</span> <br />
+					<span>
+						{! Invoice_Statement__c.Account__r.BillingCity }, 
+						{! Invoice_Statement__c.Account__r.BillingState  }
+					</span><br />
+					<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
+				</div>
+			</apex:pageBlock>
 		</div>
 		<div class="invoice-detail-block column-half">
 			<h1 class="invoice-header" >INVOICE</h1>
-			<div class="invoice-details">
-				<table class="invoice-table">
-					<tr>
-						<th>
-							INVOICE #
-						</th>
-						<th>
-							DATE
-						</th>
-					</tr>
-					<tr>
-						<td>
-							{! Invoice_Statement__c.Name }
-						</td>
-						<td>
-							<apex:outputText value="{0,date,dd/MM/yy}">
-								<apex:param value="{! Invoice_Statement__c.CreatedDate }" />
+			<apex:pageBlock>
+				<apex:pageBlockTable value="{! Invoice_Statement__c }" var="lItem">
+					<apex:column >
+			        	<apex:facet name="header">INVOICE #</apex:facet>
+			                   {! lItem.Name }
+			        </apex:column>
+			        <apex:column >
+			        	<apex:facet name="header">DATE</apex:facet>
+			                   <apex:outputText value="{0,date,dd/MM/yy}">
+								<apex:param value="{! lItem.CreatedDate }" />
 							</apex:outputText>
-						</td>
-					</tr>
-				</table>
-			</div> 
+			        </apex:column>
+		       	</apex:pageBlockTable>
+			</apex:pageBlock>
 		</div>
 	</div>
 	
 	<div class="row">
 		<div class="bill-to-block">
-			<table class="invoice-table">
-				<tr>
-					<th>
-						BILL TO
-					</th>
-				</tr>
-				<tr>
-					<td>
-						<span>{! Invoice_Statement__c.Account__r.name }</span> <br />
-						<span>{! Invoice_Statement__c.Account__r.BillingStreet },</span> <br />
-						<span>
-							{! Invoice_Statement__c.Account__r.BillingCity }, 
-							{! Invoice_Statement__c.Account__r.BillingState  },
-						</span><br />
-						<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
-					</td>
-				</tr>
-			</table>
+			<div class="column-three">
+				<apex:pageBlock>
+					<apex:pageBlockTable value="{! Invoice_Statement__c.Account__r }" var="lItem">
+						<apex:column >
+			                <apex:facet name="header">BILL TO</apex:facet>
+			                    <span>{! lItem.name }</span> <br />
+								<span>{! lItem.BillingStreet },</span> <br />
+								<span>
+									{! lItem.BillingCity }, 
+									{! lItem.BillingState  },
+								</span><br />
+								<span>Phone: {! lItem.Phone }</span>
+			            </apex:column>
+		        	</apex:pageBlockTable>
+				</apex:pageBlock>
+			</div>
 		</div>
 	</div>
 </div>
@@ -128,29 +153,38 @@
 	<div class="row">
 		<div class="column-full">
 		<apex:pageBlock>
-			<apex:pageBlockTable value="{! Invoice_Statement__c.Line_Items__r }" var="lItem">
-            	<apex:column value="{! lItem.Merchandise_Name__c }"/>
-            	<apex:column value="{! lItem.Unit_Price__c }"/>
+			<apex:pageBlockTable 
+			value="{! Invoice_Statement__c.Line_Items__r }" 
+			var="lItem" 
+			styleClass = "line-items-table">
+				<apex:column >
+	                <apex:facet name="header">DESCRIPTION</apex:facet>
+	                        {! lItem.Merchandise_Name__c }
+	            </apex:column>
+	            <apex:column >
+	                <apex:facet name="header">AMOUNT</apex:facet>
+	                        {! lItem.Unit_Price__c } ({! lItem.Unit_Sold__c })
+	            </apex:column>
+	            
+        	</apex:pageBlockTable>
+        	<apex:pageBlockTable value="{! Invoice_Statement__c.Line_Items__r }" var="lItem" styleClass = "line-items-total">
+        		<apex:column style="width: 60%;" >
+	                <apex:facet name="footer">
+		                <span style="width:100%;">Thank You For Your Business</span>
+		            </apex:facet>
+	            </apex:column>
+        		<apex:column >
+	                <apex:facet name="footer">
+	                	<div class="amount-total align-left">
+		                	TOTAL
+		                </div> 
+		                <div class="amount-total align-right">
+		                	{! totalAmount }
+		                </div>
+		            </apex:facet>
+	            </apex:column>
         	</apex:pageBlockTable>
 		</apex:pageBlock>
-		
-			<table class="invoice-table">
-				<tr>
-					<th>DESCRIPTION</th>
-					<th>AMOUNT</th>
-				</tr>
-				<apex:repeat value="{! Invoice_Statement__c.Line_Items__r }" var="lItem" >
-					<tr>
-						<td>
-							{! lItem.Merchandise_Name__r.Name }
-						</td>
-						<td>
-							{! lItem.Unit_Price__c }
-						</td>
-					</tr>
-				</apex:repeat>
-				
-							</table>
 		</div>
 	</div>
 </div>
