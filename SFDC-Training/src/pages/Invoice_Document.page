@@ -1,0 +1,159 @@
+<apex:page standardController="Invoice_Statement__c">
+<!--<apex:page standardController="Invoice_Statement__c" renderAs="pdf">-->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+	* {
+	    box-sizing: border-box;
+	}
+	
+	body {
+	    margin: 0;
+	}
+	
+	/* Create three equal columns that floats next to each other */
+	.column-three {
+	    float: left;
+	    width: 33.33%;
+	    padding: 10px;
+	    height: 300px; /* Should be removed. Only for demonstration */
+	}
+	
+	.column-half {
+	    float: left;
+	    width: 50%;
+	    padding: 10px;
+	    height: 300px; /* Should be removed. Only for demonstration */
+	}
+	
+	.column-full {
+	    float: left;
+	    width: 100%;
+	    padding: 10px;
+	    height: 300px; /* Should be removed. Only for demonstration */
+	}
+	
+	/* Clear floats after the columns */
+	.row:after {
+	    content: "";
+	    display: table;
+	    clear: both;
+	}
+	
+	.invoice-header {
+		color: cornflowerblue;
+    	font-size: xx-large;
+	}
+	.invoice-table th {
+    	background-color: #d2d9eb;
+	}
+	
+	.invoice-table th, .invoice-table td {
+    	border: 1px solid black;
+	}
+	.invoice-table {
+		border-collapse: collapse;
+	}
+	.company-header {
+		font-size: large;
+	}
+</style>
+
+
+ <!-- <apex:detail relatedList="true" /> --> 
+
+<div class="invoice-top">
+	<div class="row">
+		<div class="company-block column-half">
+			<span class="company-header">{! Invoice_Statement__c.Account__r.name }</span>
+			<div class="company-detail">
+				<span>{! Invoice_Statement__c.Account__r.BillingStreet },</span> <br />
+				<span>
+					{! Invoice_Statement__c.Account__r.BillingCity }, 
+					{! Invoice_Statement__c.Account__r.BillingState  }
+				</span><br />
+				<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
+			</div>
+		</div>
+		<div class="invoice-detail-block column-half">
+			<h1 class="invoice-header" >INVOICE</h1>
+			<div class="invoice-details">
+				<table class="invoice-table">
+					<tr>
+						<th>
+							INVOICE #
+						</th>
+						<th>
+							DATE
+						</th>
+					</tr>
+					<tr>
+						<td>
+							{! Invoice_Statement__c.Name }
+						</td>
+						<td>
+							<apex:outputText value="{0,date,dd/MM/yy}">
+								<apex:param value="{! Invoice_Statement__c.CreatedDate }" />
+							</apex:outputText>
+						</td>
+					</tr>
+				</table>
+			</div> 
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="bill-to-block">
+			<table class="invoice-table">
+				<tr>
+					<th>
+						BILL TO
+					</th>
+				</tr>
+				<tr>
+					<td>
+						<span>{! Invoice_Statement__c.Account__r.name }</span> <br />
+						<span>{! Invoice_Statement__c.Account__r.BillingStreet },</span> <br />
+						<span>
+							{! Invoice_Statement__c.Account__r.BillingCity }, 
+							{! Invoice_Statement__c.Account__r.BillingState  },
+						</span><br />
+						<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="invoice-body">
+	<div class="row">
+		<div class="column-full">
+		<apex:pageBlock>
+			<apex:pageBlockTable value="{! Invoice_Statement__c.Line_Items__r }" var="lItem">
+            	<apex:column value="{! lItem.Merchandise_Name__c }"/>
+            	<apex:column value="{! lItem.Unit_Price__c }"/>
+        	</apex:pageBlockTable>
+		</apex:pageBlock>
+		
+			<table class="invoice-table">
+				<tr>
+					<th>DESCRIPTION</th>
+					<th>AMOUNT</th>
+				</tr>
+				<apex:repeat value="{! Invoice_Statement__c.Line_Items__r }" var="lItem" >
+					<tr>
+						<td>
+							{! lItem.Merchandise_Name__r.Name }
+						</td>
+						<td>
+							{! lItem.Unit_Price__c }
+						</td>
+					</tr>
+				</apex:repeat>
+				
+							</table>
+		</div>
+	</div>
+</div>
+
+
+</apex:page>

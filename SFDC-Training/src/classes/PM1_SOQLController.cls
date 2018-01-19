@@ -12,11 +12,12 @@ public with sharing class PM1_SOQLController {
     	lstAccount = new List<Account>();
     	mapAccountOpportunities = new Map<Id, List<Id>>();
     	lstAccountOpportunities = new Set<Id>();
-    	lstOpportunity  = new List<Opportunity>();
+    	lstCampaign  = new List<Campaign>();
     	lstConatctUpdatedToday =new List<Contact>(); 
     	lstAccountSosl = new List<Account>(); 
 		lstContactSosl = new List<Contact>();
 		lstLeadSosl = new List<Lead>();
+		lstPersonalAccounts = new List<Account>(); 
     	
     	sortingOptions= new List<SelectOption>();
     	sortingOptions.add(new SelectOption('ASC', System.Label.Ascending));
@@ -33,13 +34,14 @@ public with sharing class PM1_SOQLController {
     public Set<Id> lstAccountOpportunities { get; set;}
 	public String radioSortingSelection { get; set;}
 	public List<SelectOption> sortingOptions  { get; set;}
-	public List<Opportunity> lstOpportunity  { get; set;}
+	public List<Campaign> lstCampaign  { get; set;}
 	public List<Contact> lstConatctUpdatedToday { get; set;} 
        
     public String searchStringSoql { get; set;}
 	public List<Account> lstAccountSosl { get; set;}
 	public List<Contact> lstContactSosl { get; set;}
 	public List<Lead> lstLeadSosl { get; set;}
+	public List<Account> lstPersonalAccounts { get; set;}
     /**
     * Method to fetch opportunities whose stage is closed and account is not null
     **/
@@ -94,11 +96,11 @@ public with sharing class PM1_SOQLController {
     * Method to get 10 campaigns and sort order will be selected by the user
     **/
     public PageReference query10Campaigns() {
-    	String query = System.Label.SelectOpportunityName
+    	String query = System.Label.CMSelectQuery
     					+ ' ORDER BY Name '
     					+ radioSortingSelection +
     					' LIMIT 10';
-    	lstOpportunity = Database.query(query);
+    	lstCampaign = Database.query(query);
     	return null;
     }
     
@@ -123,5 +125,13 @@ public with sharing class PM1_SOQLController {
 		lstContactSosl= ((List<Contact>)lstSearchResult[1]);
 		lstLeadSosl = ((List<Lead>)lstSearchResult[2]);
 		return null;
+    }
+    
+    /**
+    * Method to get personal accounts
+    **/
+    public PageReference queryPersonalAccounts() {
+    	lstPersonalAccounts = [SELECT Name FROM Account WHERE Is_Persoanl_Account__c = true];
+    	return null;
     }
 }

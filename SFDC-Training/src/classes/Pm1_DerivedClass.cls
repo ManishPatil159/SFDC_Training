@@ -10,7 +10,7 @@ public with sharing class Pm1_DerivedClass extends Pm1_BaseClass {
     public Pm1_DerivedClass() {
 		numberInput = 0;
     }
-    
+
     public Pm1_DerivedClass(Integer initNumberInput) {    	
 		super(initNumberInput);
 		numberInput = initNumberInput;

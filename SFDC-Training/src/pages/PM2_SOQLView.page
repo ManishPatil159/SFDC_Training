@@ -1,0 +1,280 @@
+<apex:page controller="PM2_SOQLController" >
+	<style>
+		.apexp {
+		    width: 49%;
+		    display: inline-block;
+		}
+		.pbButton {
+		    display: none;
+		}
+	</style>
+	<apex:form >
+		<!-- Get all contacts -->
+		<apex:pageBlock title="All Contact">
+				<apex:pageBlockTable value="{! lstAllContacts }" var="item" >
+				 <apex:column >
+	                <apex:facet name="header">Id</apex:facet>
+	                        {! item.Id }
+	            </apex:column>
+	            <apex:column >
+	                <apex:facet name="header">Name</apex:facet>
+	                        {! item.Name }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getAllContacts }"  value="Get Contacts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all contacts -->
+		<apex:pageBlock title="All Users">
+				<apex:pageBlockTable value="{! mapAllUsers }" var="item" >
+					<apex:column >
+	                	<apex:facet name="header">
+	                		UserId
+	                	</apex:facet>
+	                    {! item }
+	            	</apex:column>
+		            <apex:column >
+		                <apex:facet name="header">
+		                	Name
+		                </apex:facet>
+		                {! mapAllUsers[item].Name }
+	            	</apex:column>
+				</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getAllUsers }"  value="Get Users"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Accounts by Id -->
+		<apex:pageBlock title="All Accounts By Id">
+				<apex:pageBlockTable value="{! mapAccountsById }" var="item" >
+					<apex:column >
+	                	<apex:facet name="header">
+	                		AccountId
+	                	</apex:facet>
+	                    {! item }
+	            	</apex:column>
+		            <apex:column >
+		                <apex:facet name="header">
+		                	Name
+		                </apex:facet>
+		                {! mapAccountsById[item] }
+	            	</apex:column>
+				</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getAccountsGroupedById }"  value="Get Accounts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Accounts by Name -->
+		<apex:pageBlock title="All Accounts By Name">
+				<apex:pageBlockTable value="{! mapAccountsByName }" var="item" >
+					<apex:column >
+	                	<apex:facet name="header">
+	                		Name
+	                	</apex:facet>
+	                    {! item }
+	            	</apex:column>
+		            <apex:column >
+		                <apex:facet name="header">
+		                	AccountId
+		                </apex:facet>
+		                {! mapAccountsByName[item] }
+	            	</apex:column>
+				</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getAccountsGroupedByName }"  value="Get Accounts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Accounts by Enrollment Year -->
+		<apex:pageBlock title="All Accounts By Enrollment Year">
+			<apex:pageBlockSection >
+				<apex:selectList id="sel1" 
+					value="{! lstEnrollMentYearSelected }" 
+					multiselect="true" 
+					size="5">
+                		<apex:selectOptions value="{! lstEnrollMentYearUnSelected }" />
+            	</apex:selectList>
+			</apex:pageBlockSection>
+		
+			<apex:pageBlockTable value="{! lstAccountByEnrollmentYear }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Name
+	               	</apex:facet>
+	                   {! item.Name }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Enrollment Year
+		            </apex:facet>
+		                {! item.Enrollment_year__c }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getAccountsByEnrollmentYear }"  value="Get Accounts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Accounts not from Maharashtra or Kerela -->
+		<apex:pageBlock title="All Accounts Not From Maharashtra and Kerela">
+			<apex:pageBlockTable value="{! lstAccountByAddress }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Name
+	               	</apex:facet>
+	                   {! item.Name }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	State
+		            </apex:facet>
+		                {! item.BillingState }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getAccountsbyAddress }"  value="Get Accounts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Opportunities -->
+		<apex:pageBlock title="All Opportunities Above $10,000">
+			<apex:pageBlockTable value="{! lstOpportunity }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Name
+	               	</apex:facet>
+	                   {! item.Name }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Amount
+		            </apex:facet>
+		                {! item.Amount }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getOpportunities }"  value="Get Opportunities"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Opportunities -->
+		<apex:pageBlock title="All Closed Opportunities This FY">
+			<apex:pageBlockTable value="{! mapOpportunitiesAggregate }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Name
+	               	</apex:facet>
+	                   {! item }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Amount
+		            </apex:facet>
+		                {! mapOpportunitiesAggregate[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getOpportunitiyCount }"  value="Get Opportunities"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Leads -->
+		<apex:pageBlock title="All Leads By Lead Source">
+			<apex:pageBlockSection >
+				<apex:inputText value="{! leadSourceCount }" label="Lead Source Count To Filter" />
+			</apex:pageBlockSection>
+			<apex:pageBlockTable value="{! mapLeadsByLeadSource }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Lead Source
+	               	</apex:facet>
+	                   {! item }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Count
+		            </apex:facet>
+		                {! mapLeadsByLeadSource[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getLeadsByLeadSourceCount }"  value="Get Leads"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Leads Grouped Deails -->
+		<apex:pageBlock title="All Leads By Status and Lead Source">
+			<apex:pageBlockTable value="{! mapLeadsbyLeadSourceDetail }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Status
+	               	</apex:facet>
+	                   {! item }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Lead Source and Count
+		            </apex:facet>
+		                {! mapLeadsbyLeadSourceDetail[item] }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getLeadsByLeadSourceDetail }"  value="Get Leads"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all Contacts-->
+		<apex:pageBlock title="Media's Contacts">
+			<apex:pageBlockTable value="{! lstContacts }" var="item" >
+				<apex:column >
+	               	<apex:facet name="header">
+	               		Contact Name
+	               	</apex:facet>
+	                   {! item.Name }
+	           	</apex:column>
+		        <apex:column >
+		    	    <apex:facet name="header">
+		            	Account Name
+		            </apex:facet>
+		                {! item.Account.Name }
+	            </apex:column>
+			</apex:pageBlockTable>
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getContactsByIndustry }"  value="Get Contacts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Get all C records-->
+		<apex:pageBlock title="C records">
+			
+			C Name: <apex:outputText value="{! CObj.Name }" ></apex:outputText> <br />
+			A Name: <apex:outputText value="{! CObj.A__r.Name }" ></apex:outputText> <br />
+			B Name: <apex:outputText value="{! CObj.B__r.Name }" ></apex:outputText> <br />
+			
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! getCRecords }"  value="Get C"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Create Leads and log errors-->
+		<apex:pageBlock title="Create Leads">
+			
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! createLeads }"  value="Create Leads"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+		<!-- Create Leads and log errors-->
+		<apex:pageBlock title="Delete Accounts Created in Last 90 Days">
+			
+			<apex:pageBlockButtons >
+		    	<apex:commandButton action="{! deleteAccounts }"  value="Delete Accounts"/>
+		    </apex:pageBlockButtons>
+		</apex:pageBlock>
+		
+	</apex:form>
+</apex:page>
