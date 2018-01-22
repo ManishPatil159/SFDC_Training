@@ -1,193 +1,212 @@
-<apex:page standardController="Invoice_Statement__c" extensions="InvoiceDocumentExtension" showheader="false" sidebar="false">
+<apex:page standardController="Invoice_Statement__c"  renderAs="pdf" extensions="InvoiceDocumentExtension" applyBodyTag="false" showheader="false" sidebar="false">
 <!--<apex:page standardController="Invoice_Statement__c" renderAs="pdf">-->
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-	body {
-		    padding: 2% 5%;
-	}
-	* {
-	    box-sizing: border-box;
-	}
-	
-	body {
-	    margin: 0;
-	}
-	
-	/* Create three equal columns that floats next to each other */
-	.column-three {
-	    float: left;
-	    width: 33.33%;
-	    padding: 10px;
-	}
-	
-	.column-half {
-	    float: left;
-	    width: 50%;
-	    padding: 10px;
-	}
-	
-	.column-full {
-	    float: left;
-	    width: 100%;
-	    padding: 10px;
-	}
-	
-	/* Clear floats after the columns */
-	.row:after {
-	    content: "";
-	    display: table;
-	    clear: both;
-	}
-	
-	.invoice-header {
-		color: cornflowerblue;
-    	font-size: xx-large;
-	}
-	.invoice-table th {
-    	background-color: #d2d9eb;
-	}
-	
-	.invoice-table th, .invoice-table td {
-    	border: 1px solid black;
-	}
-	.invoice-table {
-		border-collapse: collapse;
-	}
-	.company-header {
-		font-size: large;
-	}
-	
-	/*[id$='pageBlockLinkeItems'] { */
-	.bPageBlock {
-    	border: none !important;
-	}
-	tr.headerRow th {
-    	background-color: #d2d9eb !important;
-	}
-	tr.headerRow th,
-	tr.dataRow td : {
-		border: 1px solid black !important;
-	}
-	
-	.totalRow {
-    	background-color: white !important;
-	}
-	.line-items-table {
-		min-height:200px;
-	}
-	.line-items-total .headerRow {
-    	display: none;
-	}
-	.amount-total {
-		width: 50%;
-    	display: inline-block;
-    	padding: 5px;
-	}
-	.align-right {
-		text-align: right;
-	}
-	.align-left {
-		text-align: left;
-	}
-</style>
 
-
- <!-- <apex:detail relatedList="true" /> --> 
-
-<div class="invoice-top">
-	<div class="row">
-		<div class="company-block column-half">
-			<apex:pageBlock>
-				<span class="company-header">{! Invoice_Statement__c.Account__r.name }</span>
-				<div class="company-detail">
-					<span>{! Invoice_Statement__c.Account__r.BillingStreet },</span> <br />
-					<span>
-						{! Invoice_Statement__c.Account__r.BillingCity }, 
-						{! Invoice_Statement__c.Account__r.BillingState  }
-					</span><br />
-					<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
-				</div>
-			</apex:pageBlock>
-		</div>
-		<div class="invoice-detail-block column-half">
-			<h1 class="invoice-header" >INVOICE</h1>
-			<apex:pageBlock>
-				<apex:pageBlockTable value="{! Invoice_Statement__c }" var="lItem">
-					<apex:column >
-			        	<apex:facet name="header">INVOICE #</apex:facet>
-			                   {! lItem.Name }
-			        </apex:column>
-			        <apex:column >
-			        	<apex:facet name="header">DATE</apex:facet>
-			                   <apex:outputText value="{0,date,dd/MM/yy}">
+<head>
+    <style>
+		body {
+			    padding: 2% 5%;
+		}
+		/* Create three equal columns that floats next to each other */
+		.column-three {
+		    float: left;
+		    width: 33.33%;
+		    padding: 10px;
+		}
+		
+		.column-half {
+		    float: left;
+		    width: 50%;
+		    padding: 10px;
+		}
+		
+		.column-full {
+		    float: left;
+		    width: 100%;
+		    padding: 10px;
+		}
+		
+		/* Clear floats after the columns */
+		.row:after {
+		    content: "";
+		    display: table;
+		    clear: both;
+		}
+		
+		.invoice-header {
+			color: cornflowerblue;
+	    	font-size: xx-large;
+		}
+		
+		.invoice-table th {
+	    	background-color: #d2d9eb;
+		}
+		
+		.invoice-table th {
+	    	border: 1px solid #cecece ;
+		}
+		.invoice-table {
+			border-collapse: collapse;
+			margin-bottom:5%;
+		}
+		
+		.line-item-table {
+			margin-bottom:0%;
+		}
+		/*.line-item-tr :only-child {
+			height:200px;			
+		}*/
+		
+		.full-width {
+			width:100%
+		}
+		.company-header {
+			font-size: large;
+		}
+		
+		/*[id$='pageBlockLinkeItems'] { */
+		.bPageBlock {
+	    	border: none !important;
+		}
+		tr.headerRow th {
+	    	background-color: #d2d9eb !important;
+		}
+		tr.headerRow th {
+			border: 1px solid #cecece  !important;
+		}
+		
+		.invoice-table td {
+	    	border-left: 1px solid #cecece ;
+	    	border-right: 1px solid #cecece ;
+		}
+		
+		.invoice-table tr:last-child {
+		    border-bottom: 1px solid #cecece;
+		}
+		
+		.totalRow {
+	    	background-color: white !important;
+		}
+		.line-items-table {
+			min-height:200px;
+		}
+		.line-items-total .headerRow {
+	    	display: none;
+		}
+		.amount-total {
+			width: 50%;
+	    	display: inline-block;
+	    	padding: 5px;
+		}
+		.align-right {
+			text-align: right;
+		}
+		.align-left {
+			text-align: left;
+		}
+		.float-right {
+			 float: right
+		}
+		.align-right-table {
+			float:right;
+		}
+	</style>
+</head>
+<body>
+<table style="width:100%">
+	<tr>
+		<td>
+			<span class="company-header">{! Invoice_Statement__c.Account__r.name }</span><br />
+				{! Invoice_Statement__c.Account__r.BillingStreet },<br />
+				{! Invoice_Statement__c.Account__r.BillingCity }, <br />
+				{! Invoice_Statement__c.Account__r.BillingState  }<br />
+				{! Invoice_Statement__c.Account__r.Phone }<br />
+		</td>
+		<td>
+			<h1 class="invoice-header float-right" >INVOICE</h1>
+			<table class="invoice-table full-width float-right">
+				<tr>
+					<th>INVOICE #</th>
+					<th>DATE</th>
+				</tr>
+				<apex:repeat value="{! Invoice_Statement__c }" var="lItem">
+					<tr>
+						<td>{! lItem.Name }</td>
+						<td>
+							<apex:outputText value="{0,date,dd/MM/yy}">
 								<apex:param value="{! lItem.CreatedDate }" />
 							</apex:outputText>
-			        </apex:column>
-		       	</apex:pageBlockTable>
-			</apex:pageBlock>
-		</div>
-	</div>
+						</td>
+					</tr>
+				</apex:repeat>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="invoice-table full-width">
+				<tr>
+					<th>
+						BILL TO
+					</th>
+				</tr>
+				<tr>
+					<td>
+						{! Invoice_Statement__c.Account__r.name } <br />
+						{! Invoice_Statement__c.Account__r.BillingStreet }, <br />
+						{! Invoice_Statement__c.Account__r.BillingCity }, 
+						{! Invoice_Statement__c.Account__r.BillingState  },<br />
+						<span>Phone: {! Invoice_Statement__c.Account__r.Phone }</span>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+<table class="invoice-table full-width line-item-table">
+	<thead>
+		<tr>
+			<th>
+				DESCRIPTION
+			</th>
+			<th>
+				AMOUNT
+			</th>
+		</tr>
+	</thead>
+	<tbody class="line-item-tr">
+		<apex:repeat value="{! Invoice_Statement__c.Line_Items__r }" var="lItem">
+			<tr>
+				<td>
+					{! lItem.Merchandise_Name__c }
+				</td>
+				<td style="height:{! (IF(lineItemsCount == 1,'200px','auto')) };">
+					{! lItem.Unit_Price__c } ({! lItem.Unit_Sold__c })
+				</td>
+			</tr>
+		</apex:repeat>
+	</tbody>
+</table>
+
+<table class="full-width">
+	<tr>
+		<td>
+			Thank You For Your Business
+		</td>
+		<td>
+				TOTAL
+		    	{! totalAmount }
+		</td>
+	</tr>
+</table>
+
+
+
+<div class="invoice-detail-block column-half">
 	
-	<div class="row">
-		<div class="bill-to-block">
-			<div class="column-three">
-				<apex:pageBlock>
-					<apex:pageBlockTable value="{! Invoice_Statement__c.Account__r }" var="lItem">
-						<apex:column >
-			                <apex:facet name="header">BILL TO</apex:facet>
-			                    <span>{! lItem.name }</span> <br />
-								<span>{! lItem.BillingStreet },</span> <br />
-								<span>
-									{! lItem.BillingCity }, 
-									{! lItem.BillingState  },
-								</span><br />
-								<span>Phone: {! lItem.Phone }</span>
-			            </apex:column>
-		        	</apex:pageBlockTable>
-				</apex:pageBlock>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="invoice-body">
-	<div class="row">
-		<div class="column-full">
-		<apex:pageBlock>
-			<apex:pageBlockTable 
-			value="{! Invoice_Statement__c.Line_Items__r }" 
-			var="lItem" 
-			styleClass = "line-items-table">
-				<apex:column >
-	                <apex:facet name="header">DESCRIPTION</apex:facet>
-	                        {! lItem.Merchandise_Name__c }
-	            </apex:column>
-	            <apex:column >
-	                <apex:facet name="header">AMOUNT</apex:facet>
-	                        {! lItem.Unit_Price__c } ({! lItem.Unit_Sold__c })
-	            </apex:column>
-	            
-        	</apex:pageBlockTable>
-        	<apex:pageBlockTable value="{! Invoice_Statement__c.Line_Items__r }" var="lItem" styleClass = "line-items-total">
-        		<apex:column style="width: 60%;" >
-	                <apex:facet name="footer">
-		                <span style="width:100%;">Thank You For Your Business</span>
-		            </apex:facet>
-	            </apex:column>
-        		<apex:column >
-	                <apex:facet name="footer">
-	                	<div class="amount-total align-left">
-		                	TOTAL
-		                </div> 
-		                <div class="amount-total align-right">
-		                	{! totalAmount }
-		                </div>
-		            </apex:facet>
-	            </apex:column>
-        	</apex:pageBlockTable>
-		</apex:pageBlock>
-		</div>
-	</div>
 </div>
 
 
+
+</body>
 </apex:page>
