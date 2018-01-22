@@ -1,4 +1,4 @@
-<apex:page standardController="Invoice_Statement__c"  renderAs="pdf" extensions="InvoiceDocumentExtension" applyBodyTag="false" showheader="false" sidebar="false">
+<apex:page standardController="Invoice_Statement__c" renderAs="pdf" extensions="InvoiceDocumentExtension" applyBodyTag="false" showheader="false" sidebar="false">
 <!--<apex:page standardController="Invoice_Statement__c" renderAs="pdf">-->
 
 <head>
@@ -79,9 +79,9 @@
 	    	border-right: 1px solid #cecece ;
 		}
 		
-		.invoice-table tr:last-child {
+		/*.invoice-table tr:last-child {
 		    border-bottom: 1px solid #cecece;
-		}
+		}*/
 		
 		.totalRow {
 	    	background-color: white !important;
@@ -109,6 +109,21 @@
 		.align-right-table {
 			float:right;
 		}
+		.height-adjust {
+			height:200px;
+		}
+		.last-border {
+			border-bottom: 1px solid #cecece;
+		}
+		.total-table,
+		.total-table td 
+		{
+			border: 1px solid #cecece;
+		}
+		.bill-to-table td {
+	    	border-left: none;
+	    	border-right: none;
+		}
 	</style>
 </head>
 <body>
@@ -123,7 +138,7 @@
 		</td>
 		<td>
 			<h1 class="invoice-header float-right" >INVOICE</h1>
-			<table class="invoice-table full-width float-right">
+			<table class="invoice-table full-width float-right total-table">
 				<tr>
 					<th>INVOICE #</th>
 					<th>DATE</th>
@@ -143,7 +158,7 @@
 	</tr>
 	<tr>
 		<td>
-			<table class="invoice-table full-width">
+			<table class="bill-to-table invoice-table full-width">
 				<tr>
 					<th>
 						BILL TO
@@ -176,11 +191,15 @@
 	</thead>
 	<tbody class="line-item-tr">
 		<apex:repeat value="{! Invoice_Statement__c.Line_Items__r }" var="lItem">
-			<tr>
+			<tr 
+				class="{! (IF(lineItemsCount == 1,'height-adjust ','')) } {! (IF(Invoice_Statement__c.Line_Items__r[lineItemsCount-1].Id == lItem.Id, 'last-border', '' )) 
+					   }">
 				<td>
-					{! lItem.Merchandise_Name__c }
+					{! lItem.Merchandise_Name__r.Name }
+					
 				</td>
-				<td style="height:{! (IF(lineItemsCount == 1,'200px','auto')) };">
+				<td>
+					
 					{! lItem.Unit_Price__c } ({! lItem.Unit_Sold__c })
 				</td>
 			</tr>
@@ -188,7 +207,7 @@
 	</tbody>
 </table>
 
-<table class="full-width">
+<table class="invoice-table full-width total-table">
 	<tr>
 		<td>
 			Thank You For Your Business
@@ -203,7 +222,6 @@
 
 
 <div class="invoice-detail-block column-half">
-	
 </div>
 
 
