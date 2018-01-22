@@ -8,6 +8,9 @@ public with sharing class InvoiceDocumentExtension {
     public Invoice_Statement__c invoiceStatement { get; set;}
     public Integer lineItemsCount  { get; set;}
     
+    /**
+    * Property to display total amount of invoice.
+    **/
     public Decimal totalAmount { get {
     		if(totalAmount == 0.0) {
     			totalAmount = getTotal();
@@ -15,6 +18,9 @@ public with sharing class InvoiceDocumentExtension {
     		return totalAmount;
     	} set; }
     
+    /**
+    * Method to calculate the total amount for an invoice
+    **/
     public Decimal getTotal() {
     	Decimal amount = 0;
     	for(Line_Item__c lineItemObj : invoiceStatement.Line_Items__r) {
