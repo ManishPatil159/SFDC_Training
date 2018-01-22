@@ -112,5 +112,46 @@ public class TestDataFactory {
     				Status = 'Open - Not Contacted'));
     	}
     	insert lstLead;
-    } 
+    }
+
+	/**
+	* Method to generate Invoice Statements
+	**/
+	public static void createInvoice_Statement(Integer invoiceCount) {
+		List<Account> lstAccounts = TestDataFactory.createAccounts(50);
+		insert lstAccounts;
+		
+		List<Invoice_Statement__c> lstInvoices = new List<Invoice_Statement__c>();
+		for(Integer i = 0; i<invoiceCount; i++) {
+			lstInvoices.add(new Invoice_Statement__c(Account__c = lstAccounts[0].Id));
+		}
+		insert lstInvoices;
+		
+		List<Merchandise__c> lstMerchants = new List<Merchandise__c>();
+		for(Integer i = 0; i<invoiceCount; i++) {
+			lstMerchants.add(
+				new Merchandise__c(
+					Name='Merchandice' + i, 
+					Description__c = 'Test Description' + i,
+					Price__c = (100 * i),
+					Total_Inventory__c = i
+				)
+			);
+		}
+		insert lstMerchants;
+		 
+		List<Line_Item__c> lstLineItem = new List<Line_Item__c>();
+		for(Integer i = 0; i< invoiceCount; i++) {
+			lstLineItem.add(
+				new Line_Item__c(
+					Name='LineItem-' + i, 
+					Invoice_Statement__c = lstInvoices[i].Id, 
+					Merchandise_Name__c = lstMerchants[i].Id, 
+					Unit_Price__c = (100 * i), 
+					Unit_Sold__c = i
+				)
+			);
+		}
+		insert lstLineItem;
+	}
 }
