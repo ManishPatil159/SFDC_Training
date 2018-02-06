@@ -1,3 +1,12 @@
+/**
+*  ================================================================================================
+*   Version    Date          Author                        Comment
+*  ================================================================================================
+*   v1.0     Jan-24-2017   Manish Patil  	Advanced Programming - 1 Assignment code
+*											process which will run every 3 hours/day and remove the 
+*											duplicate leads from the org. 
+*/
+
 global class AP1_DulplicateLeadDeleteScheduler implements Schedulable {
 	global void execute(SchedulableContext ctx) {
 		List<Lead> lstLead = [SELECT Name, email FROM Lead];
@@ -28,7 +37,6 @@ global class AP1_DulplicateLeadDeleteScheduler implements Schedulable {
 }
 
 /**
-* 15 min gap
 * System.schedule('Scheduled Job 1', '0 0 * * * ?', new AP1_DulplicateLeadDeleteScheduler());
 * System.schedule('Scheduled Job 2', '0 15 * * * ?', new AP1_DulplicateLeadDeleteScheduler());
 * System.schedule('Scheduled Job 3', '0 30 * * * ?', new AP1_DulplicateLeadDeleteScheduler());

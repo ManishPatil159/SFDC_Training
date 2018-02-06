@@ -1,3 +1,13 @@
+/**
+*  ================================================================================================
+*   Version    Date          Author                        Comment
+*  ================================================================================================
+*   v1.0     Jan-24-2017   Manish Patil  	Advanced Programming - 1 Assignment code
+*											Process which will run every day in the midnight & 
+*											collect all Closed won opportunities of that account in 
+*											a day & send an email to Primary Contact. 
+*/
+
 global class AP1_closedWonOpportunitySchedule implements Schedulable {
     global void execute(SchedulableContext ctx) {
     	List<Account> lstAccount = [SELECT 
